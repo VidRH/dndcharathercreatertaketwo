@@ -1,1 +1,30 @@
-@import "tailwindcss"
+@import "tailwindcss" ;
+
+@theme {
+  --color-paper: #F7F3E6;
+  --color-blue: #33D6FF;
+  --color-dark: #393D3F;
+};
+
+@font-face {
+    font-family: 'Alice';
+    src: url('./fonts/Alice\ in\ Wonderland.ttf');
+};
+@font-face {
+    font-family: 'Dragon';
+    src: url('./fonts/PowerofDragon-Regular.ttf');
+};
+@font-face {
+    font-family: 'Morris';
+    src: url('./fonts/MorrisRoman-Black.ttf');
+};
+
+
+
+
+
+
+body {
+  font-family: 'Morris', 'Dragon', 'Alice', 'sans-serif';
+  background-color: var(--color-paper);
+}
