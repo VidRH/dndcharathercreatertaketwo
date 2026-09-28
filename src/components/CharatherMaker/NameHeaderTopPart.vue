@@ -5,11 +5,11 @@
 
 <template>
   <Main>
-    <div class=""> <!-- top part of the charather maker includes: name, class, race,  , xp ,background, alignment --->
+    <div> <!-- top part of the charather maker includes: name, class, race,  , xp ,background, alignment --->
       <div class="flex justify-center items-center">
           <div>
             <p>Character Name</p>
-            <input type="text" placeholder="Name" class="border-2 border-black rounded-md p-1 m-1 w-60 h-10" /> <!-- name input --->
+            <input type="text" placeholder="Name" class="border-2 border-black rounded-md p-1 m-1 h-10" /> <!-- name input --->
           </div>
           <div class="grid grid-cols-3 grid-rows-2 justify-center items-center">
 

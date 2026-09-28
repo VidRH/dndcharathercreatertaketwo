@@ -1,11 +1,13 @@
 <script setup>
 
+import ArmorHitpoints from '../ArmorHitpoint.vue'
+
 </script>
 
 <template>
-  <Main>
-    <p>armormiddle</p>
-  </Main>
+  <main>
+    <ArmorHitpoints/>
+  </main>
 </template>
 
 <style scoped></style>

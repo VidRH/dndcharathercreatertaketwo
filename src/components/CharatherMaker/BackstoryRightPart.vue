@@ -4,7 +4,7 @@
 
 <template>
   <Main class="w-1/3 ">
-    <div class="w-full bg-paperdarker rounded-md">
+    <div class="w-full">
       <div class=" w-full flex flex-col  h-50">
           <textarea id="personalityTraits" class="border-2 border-black rounded-md mt-2 mx-3 h-full"></textarea>
           <label for="personalityTraits" class="flex justify-center items-center">personality traits</label>
