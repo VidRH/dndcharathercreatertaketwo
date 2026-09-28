@@ -1,7 +1,8 @@
 @import "tailwindcss" ;
 
 @theme {
-  --color-paper: #F7F3E6;
+  --color-paperlighter: #F7F3E6;
+  --color-paperdarker: #ebe2c2;
   --color-blue: #33D6FF;
   --color-dark: #393D3F;
 };
@@ -26,5 +27,5 @@
 
 body {
   font-family: 'Morris', 'Dragon', 'Alice', 'sans-serif';
-  background-color: var(--color-paper);
+  background-color: var(--color-paperlighter);
 }
