@@ -1,6 +1,43 @@
 <script setup>
 
+import { ref, onMounted } from 'vue'
+import { fetchAllOptions } from '../modules/useClassRaceAlignApi.js'
+
+const classes = ref([])
+const races = ref([])
+const alignments = ref([])
+const backgrounds = ref([])
+
+const loading = ref(true)
+const error = ref(null)
+
+// The component starts the fetch when it mounts
+onMounted(async () => {
+  try {
+    const data = await fetchAllOptions()
+
+    classes.value = data.classes
+    races.value = data.races
+    alignments.value = data.alignments
+    backgrounds.value = data.backgrounds
+
+    console.log('Classes:', JSON.stringify(classes.value, null, 2))
+    console.log('Races:', JSON.stringify(races.value, null, 2))
+    console.log('Alignments:', JSON.stringify(alignments.value, null, 2))
+    console.log('Backgrounds:', JSON.stringify(backgrounds.value, null, 2))
+
+
+  } catch (err) {
+    error.value = err.message
+  } finally {
+    loading.value = false
+  }
+})
+
+
+
 </script>
+
 
 
 <template>
@@ -18,6 +55,10 @@
               <div>
                 <P>Class</P>    <!-- class select has to call in classes from api and populate the options--->
                 <select class="border-2 border-black rounded-md p-1 m-1 w-48 h-10">
+                  <option value="" disabled selected>Select Class</option>
+                  <option v-for="item in classes" :key="item.index" :value="item.index">
+                    {{ item.name }}
+                  </option>
                 </select>
               </div>
               <div>              <!-- level input -->
@@ -29,7 +70,11 @@
             <div>             <!-- background select has to call in backgrounds from api and populate the options--->
               <P>Background</P>
               <select class="border-2 border-black rounded-md p-1 m-1 w-60 h-10">
-            </select>
+                <option value="" disabled selected>Select Background</option>
+                <option v-for="item in backgrounds" :key="item.index" :value="item.index">
+                  {{ item.name }}
+                </option>
+              </select>
             </div>
 
 
@@ -41,12 +86,20 @@
             <div>             <!-- race select has to call in races from api and populate the options--->
               <p>Race</p>
               <select class="border-2 border-black rounded-md p-1 m-1 w-60 h-10">
-            </select>
+                <option value="" disabled selected>Select Race</option>
+                <option v-for="item in races" :key="item.index" :value="item.index">
+                  {{ item.name }}
+                </option>
+              </select>
             </div>
 
             <div>              <!-- alignment select has to call in alignments from api and populate the options--->
               <p>Alignment</p>
               <select class="border-2 border-black rounded-md p-1 m-1 w-60 h-10">
+                  <option value="" disabled selected>Select Alignment</option>
+                  <option v-for="item in alignments" :key="item.index" :value="item.index">
+                    {{ item.name }}
+                  </option>
             </select>
             </div>
 

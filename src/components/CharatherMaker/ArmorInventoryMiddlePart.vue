@@ -1,12 +1,14 @@
 <script setup>
 
-import ArmorHitpoints from '../ArmorHitpoint.vue'
+import ArmorHitpoints from './middlepart/ArmorHitpoint.vue'
+import WeaponsEquipment from './middlepart/WeaponsEquipment.vue'
 
 </script>
 
 <template>
   <main>
     <ArmorHitpoints/>
+    <WeaponsEquipment/>
   </main>
 </template>
 
