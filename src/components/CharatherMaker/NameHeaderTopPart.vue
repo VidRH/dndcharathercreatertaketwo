@@ -1,7 +1,7 @@
 <script setup>
 
 import { ref, onMounted } from 'vue'
-import { fetchAllOptions } from '../modules/useClassRaceAlignApi.js'
+import { fetchAllOptionsTopPart } from '../modules/useClassRaceAlignApi.js'
 
 const classes = ref([])
 const races = ref([])
@@ -14,17 +14,13 @@ const error = ref(null)
 // The component starts the fetch when it mounts
 onMounted(async () => {
   try {
-    const data = await fetchAllOptions()
+    const data = await fetchAllOptionsTopPart()
+
 
     classes.value = data.classes
     races.value = data.races
     alignments.value = data.alignments
     backgrounds.value = data.backgrounds
-
-    console.log('Classes:', JSON.stringify(classes.value, null, 2))
-    console.log('Races:', JSON.stringify(races.value, null, 2))
-    console.log('Alignments:', JSON.stringify(alignments.value, null, 2))
-    console.log('Backgrounds:', JSON.stringify(backgrounds.value, null, 2))
 
 
   } catch (err) {
@@ -33,7 +29,6 @@ onMounted(async () => {
     loading.value = false
   }
 })
-
 
 
 </script>
