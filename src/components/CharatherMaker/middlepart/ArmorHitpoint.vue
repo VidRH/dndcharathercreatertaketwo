@@ -1,5 +1,5 @@
 <script setup>
-
+import { selectedClass, hitDice, maxHitPoints } from '../../modules/useSelectedClass.js'
 </script>
 
 
@@ -11,7 +11,7 @@
           <input type="number" class="w-35 h-35 text-center border-2 text-4xl" placeholder="0" id="armorclass">
           <label for="armorclass" class="absolute text-xs text-gray-500">Armor</label> <!--ac calculated n stffu-->
         </div>
-        <div class="w-1/3   flex justify-center">
+        <div class="w-1/3 flex justify-center">
           <input type="number" class="w-35 h-35 text-center border-2 text-4xl" placeholder="0" id="initiative">
           <label for="initiative" class="absolute text-xs text-gray-500">Initiative</label> <!--initiative modifier-->
         </div>
@@ -23,10 +23,10 @@
       <div>
         <div class="flex justify-center items-center gap-2.5 w-full"> <!--hit points, hit dice, temporary hitpoints, death saves-->
           <label for="maxhitpoints" class="text-nowrap">Hit Point Maximum</label>
-          <input type="number" class="border-2 w-full" placeholder="0" id="maxhitpoints"/>
+          <input type="number" class="border-2 w-full" placeholder="0" id="maxhitpoints" :value="maxHitPoints"/>
         </div>
         <div class="flex flex-col ">
-          <input type="number" class="border-2 w-full h-40 text-5xl text-center" placeholder="0" id="currenthitpoints"/>
+          <input type="number" class="border-2 w-full h-40 text-5xl text-center" placeholder="0" id="currenthitpoints" :value="maxHitPoints"/>
           <label for="currenthitpoints" class="text-nowrap flex justify-center">Current Hit Points</label>
         </div>
         <div class="flex flex-col ">
@@ -39,10 +39,10 @@
           <div class="w-1/2"> <!--hit dice total, hit dice-->
             <div class="flex justify-center items-center gap-2.5 text-nowrap ">
               <label for="hitdicetotal">hit dice total</label>
-              <input type="number" class="border-2 w-full" placeholder="0" id="hitdicetotal"/>
+              <input type="number" class="border-2 w-full" placeholder="0" id="hitdicetotal" :value="selectedClass ? 1 : ''"/>
             </div>
             <div class="flex flex-col justify-center   items-center gap-2.5 text-nowrap">
-              <input type="text" class="border-2 h-20 w-90% text-center " placeholder="0" id="hitdice"/>
+              <input type="text" class="border-2 h-20 w-90% text-center " placeholder="0" id="hitdice" :value="hitDice"/>
               <label for="hitdice" class="text-xs text-gray-500 text-center">hit dice</label>
             </div>
           </div>

@@ -1,4 +1,5 @@
 <script setup>
+import { startingEquipment } from '../../modules/useSelectedClass.js'
 </script>
 
 <template>
@@ -16,8 +17,8 @@
         </label>
       </div>
       <div>
-        <label>
-          <textarea></textarea>
+        <label class="flex flex-col">
+          <textarea :value="startingEquipment"></textarea>
         </label>
 
       </div>

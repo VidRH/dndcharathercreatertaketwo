@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { fetchAllOptionsLeftPart } from '../modules/useAbilityScoresApi.js'
+import { isSavingThrow, otherProficiencies } from '../modules/useSelectedClass.js'
 
 const abilityScores = ref([])
 // const savingThrows = ref([])
@@ -68,7 +69,7 @@ onMounted(async () => {
           <div v-for="ability in abilityScores" :key="ability.index" class="flex justify-between items-center gap-2.5">
             <div class="flex justify-between items-center gap-2.5">
               <!-- v-for here for each saving throw -->
-              <input type="checkbox" class="w-10 h-10 text-2xl text-center"/>
+              <input type="checkbox" :checked="isSavingThrow(ability.index)" class="w-10 h-10 text-2xl text-center"/>
               <!-- something here for displaying saving throw number stuff -->
               <label>{{ ability.name }}</label>
               <!-- This is a comment -->
@@ -86,7 +87,7 @@ onMounted(async () => {
         <label>Passive Perception</label>
       </div>
       <div class="flex flex-col justify-center items-center gap-2.5">
-        <textarea class="w-full h-40 border-2"></textarea>
+        <textarea :value="otherProficiencies" class="w-full h-40 border-2"></textarea>
         <label>Other Proficiencies & Languages</label>
       </div>
     </div>

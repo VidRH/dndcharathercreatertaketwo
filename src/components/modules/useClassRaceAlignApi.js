@@ -14,6 +14,15 @@ export const fetchRaces = () => fetchList('races')
 export const fetchAlignments = () => fetchList('alignments')
 export const fetchBackgrounds = () => fetchList('backgrounds')
 
+// Fetches the full info for one class, e.g. fetchClassDetails('fighter')
+export async function fetchClassDetails(index) {
+  const response = await fetch(`${BASE_URL}/classes/${index}`)
+  if (!response.ok) {
+    throw new Error(`Failed to fetch class ${index}: ${response.status}`)
+  }
+  return response.json()
+}
+
 // Fetches everything in parallel and returns four separate arrays
 export async function fetchAllOptionsTopPart() {
   const [classes, races, alignments, backgrounds] = await Promise.all([

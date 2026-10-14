@@ -2,6 +2,7 @@
 
 import { ref, onMounted } from 'vue'
 import { fetchAllOptionsTopPart } from '../modules/useClassRaceAlignApi.js'
+import { selectClass } from '../modules/useSelectedClass.js'
 
 const classes = ref([])
 const races = ref([])
@@ -30,6 +31,14 @@ onMounted(async () => {
   }
 })
 
+// Runs when you pick a class in the dropdown
+async function onClassChange(event) {
+  try {
+    await selectClass(event.target.value)
+  } catch (err) {
+    error.value = err.message
+  }
+}
 
 </script>
 
@@ -49,10 +58,10 @@ onMounted(async () => {
             <div class="flex justify-center items-center"> <!-- class select has to call in classes from api and populate the options plus lvl for good measure-->
               <div>
                 <P>Class</P>    <!-- class select has to call in classes from api and populate the options--->
-                <select class="border-2 border-black rounded-md p-1 m-1 w-48 h-10">
+                <select @change="onClassChange" class="border-2 border-black rounded-md p-1 m-1 w-48 h-10">
                   <option value="" disabled selected>Select Class</option>
-                  <option v-for="item in classes" :key="item.index" :value="item.index">
-                    {{ item.name }}
+                  <option v-for="cls in classes" :key="cls.index" :value="cls.index">
+                    {{ cls.name }}
                   </option>
                 </select>
               </div>
@@ -66,8 +75,8 @@ onMounted(async () => {
               <P>Background</P>
               <select class="border-2 border-black rounded-md p-1 m-1 w-60 h-10">
                 <option value="" disabled selected>Select Background</option>
-                <option v-for="item in backgrounds" :key="item.index" :value="item.index">
-                  {{ item.name }}
+                <option v-for="background in backgrounds" :key="background.index" :value="background.index">
+                  {{ background.name }}
                 </option>
               </select>
             </div>
@@ -82,8 +91,8 @@ onMounted(async () => {
               <p>Race</p>
               <select class="border-2 border-black rounded-md p-1 m-1 w-60 h-10">
                 <option value="" disabled selected>Select Race</option>
-                <option v-for="item in races" :key="item.index" :value="item.index">
-                  {{ item.name }}
+                <option v-for="race in races" :key="race.index" :value="race.index">
+                  {{ race.name }}
                 </option>
               </select>
             </div>
@@ -92,8 +101,8 @@ onMounted(async () => {
               <p>Alignment</p>
               <select class="border-2 border-black rounded-md p-1 m-1 w-60 h-10">
                   <option value="" disabled selected>Select Alignment</option>
-                  <option v-for="item in alignments" :key="item.index" :value="item.index">
-                    {{ item.name }}
+                  <option v-for="alignment in alignments" :key="alignment.index" :value="alignment.index">
+                    {{ alignment.name }}
                   </option>
             </select>
             </div>
