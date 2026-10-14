@@ -22,7 +22,7 @@
         <label for="flaws" class="flex justify-center items-center">flaws</label>
       </div>
     </div>
-    <div class=" w-full flex flex-col h-150">
+    <div class=" w-full flex flex-col h-192.5">
       <textarea id="features&traits" class="border-2 border-black rounded-md mt-2 h-full"></textarea>
       <label for="features&traits" class="flex justify-center items-center">Fetures & Traits</label>
      </div>

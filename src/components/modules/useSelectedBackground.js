@@ -9,10 +9,22 @@ export async function selectBackground(index) {
   selectedBackground.value = await fetchBackgroundDetails(index)
 }
 
-// Left part: skills/tools the background makes you good at
+// Left part: does the background give you this skill? e.g. hasBackgroundSkill('insight')
+// The API calls the skill 'insight' in the skills list but 'skill-insight' in proficiencies
+export function hasBackgroundSkill(skillIndex) {
+  if (!selectedBackground.value) return false
+  return selectedBackground.value.starting_proficiencies.some(
+    (prof) => prof.index === `skill-${skillIndex}`,
+  )
+}
+
+// Left part: everything that ISN'T a skill (tools etc.), since skills get a checkbox instead
 export const backgroundProficiencies = computed(() => {
   if (!selectedBackground.value) return ''
-  return selectedBackground.value.starting_proficiencies.map((prof) => prof.name).join('\n')
+  return selectedBackground.value.starting_proficiencies
+    .filter((prof) => !prof.index.startsWith('skill-'))
+    .map((prof) => prof.name)
+    .join('\n')
 })
 
 // Middle part: the gear the background gives you, plus the "pick one" choices
