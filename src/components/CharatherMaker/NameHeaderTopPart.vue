@@ -3,6 +3,8 @@
 import { ref, onMounted } from 'vue'
 import { fetchAllOptionsTopPart } from '../modules/useClassRaceAlignApi.js'
 import { selectClass } from '../modules/useSelectedClass.js'
+import { selectRace } from '../modules/useSelectedRace.js'
+import { selectBackground } from '../modules/useSelectedBackground.js'
 
 const classes = ref([])
 const races = ref([])
@@ -35,6 +37,24 @@ onMounted(async () => {
 async function onClassChange(event) {
   try {
     await selectClass(event.target.value)
+  } catch (err) {
+    error.value = err.message
+  }
+}
+
+// Runs when you pick a race in the dropdown
+async function onRaceChange(event) {
+  try {
+    await selectRace(event.target.value)
+  } catch (err) {
+    error.value = err.message
+  }
+}
+
+// Runs when you pick a background in the dropdown
+async function onBackgroundChange(event) {
+  try {
+    await selectBackground(event.target.value)
   } catch (err) {
     error.value = err.message
   }
@@ -73,7 +93,7 @@ async function onClassChange(event) {
 
             <div>             <!-- background select has to call in backgrounds from api and populate the options--->
               <P>Background</P>
-              <select class="border-2 border-black rounded-md p-1 m-1 w-60 h-10">
+              <select @change="onBackgroundChange" class="border-2 border-black rounded-md p-1 m-1 w-60 h-10">
                 <option value="" disabled selected>Select Background</option>
                 <option v-for="background in backgrounds" :key="background.index" :value="background.index">
                   {{ background.name }}
@@ -89,7 +109,7 @@ async function onClassChange(event) {
 
             <div>             <!-- race select has to call in races from api and populate the options--->
               <p>Race</p>
-              <select class="border-2 border-black rounded-md p-1 m-1 w-60 h-10">
+              <select @change="onRaceChange" class="border-2 border-black rounded-md p-1 m-1 w-60 h-10">
                 <option value="" disabled selected>Select Race</option>
                 <option v-for="race in races" :key="race.index" :value="race.index">
                   {{ race.name }}

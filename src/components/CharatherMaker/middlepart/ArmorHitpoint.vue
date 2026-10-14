@@ -1,5 +1,6 @@
 <script setup>
 import { selectedClass, hitDice, maxHitPoints } from '../../modules/useSelectedClass.js'
+import { raceSpeed } from '../../modules/useSelectedRace.js'
 </script>
 
 
@@ -16,7 +17,7 @@ import { selectedClass, hitDice, maxHitPoints } from '../../modules/useSelectedC
           <label for="initiative" class="absolute text-xs text-gray-500">Initiative</label> <!--initiative modifier-->
         </div>
         <div class="w-1/3  flex justify-center">
-          <input type="number" class="w-35 h-35 text-center border-2 text-4xl" placeholder="0" id="speed">
+          <input type="number" class="w-35 h-35 text-center border-2 text-4xl" placeholder="0" id="speed" :value="raceSpeed">
           <label for="speed" class="absolute text-xs text-gray-500">Speed</label> <!--speed calculated from race and stuff-->
         </div>
       </div>

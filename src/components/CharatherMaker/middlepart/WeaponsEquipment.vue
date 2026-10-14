@@ -1,5 +1,12 @@
 <script setup>
+import { computed } from 'vue'
 import { startingEquipment } from '../../modules/useSelectedClass.js'
+import { backgroundEquipment } from '../../modules/useSelectedBackground.js'
+
+// Class gear + background gear in one list (skip empty ones)
+const allEquipment = computed(() =>
+  [startingEquipment.value, backgroundEquipment.value].filter((text) => text !== '').join('\n'),
+)
 </script>
 
 <template>
@@ -18,7 +25,7 @@ import { startingEquipment } from '../../modules/useSelectedClass.js'
       </div>
       <div>
         <label class="flex flex-col">
-          <textarea :value="startingEquipment"></textarea>
+          <textarea class="w-full min-h-80 border-2" :value="allEquipment"></textarea>
         </label>
 
       </div>
