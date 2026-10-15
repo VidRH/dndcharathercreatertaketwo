@@ -1,5 +1,5 @@
 <script setup>
-import BackgroundTopPart from './Backgroundtoppart.vue'
+import BackgroundTopPart from './BackgroundTopPart.vue'
 </script>
 
 <template class="w-full flex flex-col gap-2.5">

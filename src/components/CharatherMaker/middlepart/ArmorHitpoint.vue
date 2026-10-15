@@ -1,6 +1,7 @@
 <script setup>
 import { selectedClass, hitDice, maxHitPoints } from '../../modules/useSelectedClass.js'
 import { Speed } from '../../modules/useSelectedRace.js'
+import { armorClass } from '../../modules/useArmorClass.js'
 </script>
 
 
@@ -9,7 +10,7 @@ import { Speed } from '../../modules/useSelectedRace.js'
     <div class="flex flex-col gap-6">
       <div class="flex justify-center items-center gap-2.5"> <!--armoor class, intitiative, speed-->
         <div class="w-1/3  flex justify-center">
-          <input type="number" class="w-35 h-35 text-center border-2 text-4xl" placeholder="0" id="armorclass">
+          <input type="number" class="w-35 h-35 text-center border-2 text-4xl" placeholder="0" id="armorclass" :value="armorClass">
           <label for="armorclass" class="absolute text-xs text-gray-500">Armor class</label> <!--ac calculated n stffu-->
         </div>
         <div class="w-1/3 flex justify-center">

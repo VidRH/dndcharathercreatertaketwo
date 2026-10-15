@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { popup, confirmPopup, cancelPopup, isQuestionDone } from '../modules/useChoicePopup.js'
+import { alreadyKnown, canDouble } from '../modules/useAlreadyKnown.js'
 
 // Confirm button only works when every question is answered
 const allDone = computed(() => popup.value.questions.every(isQuestionDone))
@@ -22,6 +23,25 @@ function toggle(question, i) {
 // With "choose 2" you can't tick a 3rd one until you untick one
 const isFull = (question, i) =>
   question.choose > 1 && question.selected.length >= question.choose && !question.selected.includes(i)
+
+// --- No doubles for languages, skills and tools ---
+
+// Tick box: greyed out if it gives you something you already have (e.g. a skill from your background)
+function optionAlreadyKnown(question, option) {
+  if (canDouble(question.type)) return false
+  return option.grants.some((grant) => alreadyKnown.value.has(grant.index))
+}
+
+// Dropdown entry: greyed out if you already have it, OR you picked it in another dropdown in this popup
+function itemTaken(pick, itemIndex) {
+  if (canDouble(pick.type)) return false
+  if (alreadyKnown.value.has(itemIndex)) return true
+  return popup.value.questions.some((question) =>
+    question.selected.some((i) =>
+      question.options[i].picks.some((other) => other !== pick && other.value === itemIndex),
+    ),
+  )
+}
 </script>
 
 <template>
@@ -42,10 +62,13 @@ const isFull = (question, i) =>
               type="checkbox"
               class="w-5 h-5"
               :checked="question.selected.includes(i)"
-              :disabled="isFull(question, i)"
+              :disabled="isFull(question, i) || optionAlreadyKnown(question, option)"
               @change="toggle(question, i)"
             />
-            <span><span v-if="question.type === 'equipment'">{{ letter(i) }} </span>{{ option.label }}</span>
+            <span :class="{ 'opacity-40': optionAlreadyKnown(question, option) }">
+              <span v-if="question.type === 'equipment'">{{ letter(i) }} </span>{{ option.label }}
+              <span v-if="optionAlreadyKnown(question, option)" class="text-sm">(already have)</span>
+            </span>
           </label>
 
           <!-- options like "a martial weapon" get a dropdown so you can say WHICH one -->
@@ -57,7 +80,9 @@ const isFull = (question, i) =>
             class="border-2 border-black rounded-md p-1 disabled:opacity-40"
           >
             <option value="" disabled>{{ pick.label }}</option>
-            <option v-for="item in pick.list" :key="item.index" :value="item.index">{{ item.name }}</option>
+            <option v-for="item in pick.list" :key="item.index" :value="item.index" :disabled="itemTaken(pick, item.index)">
+              {{ item.name }}{{ itemTaken(pick, item.index) ? ' (taken)' : '' }}
+            </option>
           </select>
         </div>
       </div>
