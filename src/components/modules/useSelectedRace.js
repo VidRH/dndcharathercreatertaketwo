@@ -25,7 +25,7 @@ export const raceLanguages = computed(() => {
 })
 
 // Middle part: walking speed in feet
-export const raceSpeed = computed(() => {
+export const Speed = computed(() => {
   if (!selectedRace.value) return ''
   return selectedRace.value.speed
 })

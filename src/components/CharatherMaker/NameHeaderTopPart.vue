@@ -39,6 +39,7 @@ async function onClassChange(event) {
     await selectClass(event.target.value)
   } catch (err) {
     error.value = err.message
+    console.error('Error selecting class:', err) //dont ship its just for debugging
   }
 }
 
@@ -48,6 +49,7 @@ async function onRaceChange(event) {
     await selectRace(event.target.value)
   } catch (err) {
     error.value = err.message
+    console.error('Error selecting race:', err) //dont ship its just for debugging
   }
 }
 
@@ -57,6 +59,7 @@ async function onBackgroundChange(event) {
     await selectBackground(event.target.value)
   } catch (err) {
     error.value = err.message
+    console.error('Error selecting background:', err) //dont ship its just for debugging
   }
 }
 

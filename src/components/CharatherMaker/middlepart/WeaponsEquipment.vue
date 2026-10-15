@@ -64,7 +64,7 @@ const allEquipment = computed(() =>
             <input type="number" class="border w-full" placeholder="0" id="platinumPieces"/>
           </label>
         </div>
-        <textarea class="col-span-4 w-full border-2 rounded-xs" :value="allEquipment"></textarea>
+        <textarea class="col-span-4 w-full border-2" :value="allEquipment"></textarea>
 
       </div>
       <label for="equipment" class="flex justify-center items-center">equipment</label>

@@ -40,14 +40,6 @@ onMounted(async () => {
   }
 })
 
-
-// const abilityInputCalc = () => {
-//   const abilityScoreInput = document.getElementById('abilityScoreInput').value;
-//   console.log(abilityScoreInput);
-// }
-
-// document.getElementById("abilityScoreInput").oninput = abilityInputCalc;
-
 </script>
 
 <template>
@@ -60,9 +52,9 @@ onMounted(async () => {
           <p v-if="raceBonus(ability.index) > 0" class="text-lg text-center text-gray-500 border-x-2 border-t-2">race +{{ raceBonus(ability.index) }}</p>
         </div>
       </div>
-      <div class="col-span-3 col-start-4 gap-5"> <!-- gap doesnt work so im going to peel my skin off now, here we go AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA-->
+      <div class="col-span-3 col-start-4"> <!-- gap doesnt work so im going to peel my skin off now, here we go AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA-->
         <!---->
-        <div class="flex-col justify-between items-center gap-2.5">
+        <div class="flex-col justify-between items-center">
           <div class="flex  items-center gap-2.5">
             <input type="checkbox" class="w-10 h-10"/>
             <label>Inspiration</label>
@@ -84,7 +76,6 @@ onMounted(async () => {
               <input type="number" class="w-10 h-10 text-2xl text-center border-2" placeholder="0"/>
               <!-- something here for displaying saving throw number stuff -->
               <label>{{ ability.name }}</label>
-              <!-- This is a comment -->
             </div>
           </div>
           <label>Saving throws</label>
@@ -100,13 +91,10 @@ onMounted(async () => {
               <input type="number" class="w-10 h-10 text-2xl text-center border-2" placeholder="0"/>
               <!-- something here for displaying skill number stuff -->
               <label>{{ skill.name }}</label>
-              <!-- This is a comment -->
             </div>
           </div>
           <label>Skills</label>
         </div>
-
-
       </div>
 
 
