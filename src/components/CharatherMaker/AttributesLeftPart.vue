@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { fetchAllOptionsLeftPart } from '../modules/useAbilityScoresApi.js'
-import { isSavingThrow, otherProficiencies } from '../modules/useSelectedClass.js'
+import { isSavingThrow, hasClassSkill, otherProficiencies } from '../modules/useSelectedClass.js'
 import { raceBonus, raceLanguages } from '../modules/useSelectedRace.js'
 import { backgroundProficiencies, hasBackgroundSkill } from '../modules/useSelectedBackground.js'
 
@@ -86,7 +86,7 @@ onMounted(async () => {
           <div v-for="skill in skills" :key="skill.index" class="flex justify-between items-center gap-2.5">
             <div class="flex justify-between items-center gap-2.5">
               <!-- v-for here for each skill -->
-              <input type="checkbox" :checked="hasBackgroundSkill(skill.index)" class="w-10 h-10 text-2xl text-center"/>
+              <input type="checkbox" :checked="hasBackgroundSkill(skill.index) || hasClassSkill(skill.index)" class="w-10 h-10 text-2xl text-center"/>
 
               <input type="number" class="w-10 h-10 text-2xl text-center border-2" placeholder="0"/>
               <!-- something here for displaying skill number stuff -->

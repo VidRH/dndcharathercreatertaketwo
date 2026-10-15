@@ -3,6 +3,7 @@ import CharatherMakerTopPart from '../components/CharatherMaker/NameHeaderTopPar
 import CharatherMakerLeftPart from '../components/CharatherMaker/AttributesLeftPart.vue'
 import CharatherMakerMiddlePart from '../components/CharatherMaker/ArmorInventoryMiddlePart.vue'
 import CharatherMakerRightPart from '../components/CharatherMaker/BackstoryRightPart.vue'
+import ChoicePopup from '../components/CharatherMaker/ChoicePopup.vue'
 
 </script>
 
@@ -15,6 +16,7 @@ import CharatherMakerRightPart from '../components/CharatherMaker/BackstoryRight
       <CharatherMakerMiddlePart class="w-1/3 col-span-1 col-start-2 "/> <!--includes: armor class, initiative, speed, hit points and hit dice, temporary hitpoints, death saves, attacks spellcasting,equipment, money-->
       <CharatherMakerRightPart class="w-1/3 col-span-1 col-start-3  "/> <!--personality traits, ideal, bond, flaw, features & traits-->
     </div>
+    <ChoicePopup /> <!-- only shows up while you're picking class/race/background options -->
   </Main>
 </template>
 
