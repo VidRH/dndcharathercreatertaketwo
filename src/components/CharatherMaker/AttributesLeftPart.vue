@@ -1,9 +1,9 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { fetchAllOptionsLeftPart } from '../modules/useAbilityScoresApi.js'
-import { isSavingThrow, hasClassSkill, otherProficiencies } from '../modules/useSelectedClass.js'
+import { otherProficiencies } from '../modules/useSelectedClass.js'
 import { raceBonus, raceLanguages } from '../modules/useSelectedRace.js'
-import { backgroundProficiencies, hasBackgroundSkill } from '../modules/useSelectedBackground.js'
+import { backgroundProficiencies } from '../modules/useSelectedBackground.js'
 import {
   ABILITIES,
   ABILITY_FULL_NAMES,
@@ -25,6 +25,17 @@ import {
   formatModifier,
 } from '../modules/useAbilityScores.js'
 import { proficiencyBonus, asiBonus } from '../modules/useLevelState.js'
+import {
+  skillAbilityLabel,
+  isSkillProficient,
+  setSkillProficient,
+  isSaveProficient,
+  setSaveProficient,
+  hasExpertise,
+  skillBonus,
+  saveBonus,
+  passivePerception,
+} from '../modules/useSkills.js'
 
 // Glue the class, race and background text together for the big textarea (skip empty ones)
 const proficienciesAndLanguages = computed(() =>
@@ -133,9 +144,16 @@ onMounted(async () => {
         <div class="gap-2.5 mt-12"> <!-- saving throws -->
           <div v-for="ability in abilityScores" :key="ability.index" id="saving-throws" class="flex justify-between items-center gap-2.5">
             <div class="flex justify-between items-center gap-2.5">
-              <input type="checkbox" :checked="isSavingThrow(ability.index)" class="w-10 h-10 text-2xl text-center"/>
-              <input type="number" class="w-10 h-10 text-2xl text-center border-2" placeholder="0"/>
-              <label for="saving-throws">{{ ability.name }}</label>
+              <!-- ticked = proficient (your class ticks some, you can tick/untick yourself) -->
+              <input
+                type="checkbox"
+                :id="`save-${ability.index}`"
+                :checked="isSaveProficient(ability.index)"
+                @change="setSaveProficient(ability.index, $event.target.checked)"
+                class="w-10 h-10 text-2xl text-center"
+              />
+              <input type="text" readonly :value="formatModifier(saveBonus(ability.index))" class="w-10 h-10 text-2xl text-center border-2"/>
+              <label :for="`save-${ability.index}`">{{ ABILITY_FULL_NAMES[ability.index] }}</label>
             </div>
           </div>
           <label>Saving throws</label>
@@ -145,9 +163,19 @@ onMounted(async () => {
         <div class="gap-2.5 mt-12"> <!-- skills  -->
           <div v-for="skill in skills" :key="skill.index" id="skills" class="flex justify-between items-center gap-2.5">
             <div class="flex justify-between items-center gap-2.5">
-              <input type="checkbox" :checked="hasBackgroundSkill(skill.index) || hasClassSkill(skill.index)" class="w-10 h-10 text-2xl text-center"/>
-              <input type="number" class="w-10 h-10 text-2xl text-center border-2" placeholder="0"/>
-              <label for="skills">{{ skill.name }}</label>
+              <!-- ticked = proficient (class/background/race tick some, you can tick/untick yourself) -->
+              <input
+                type="checkbox"
+                :id="`skill-${skill.index}`"
+                :checked="isSkillProficient(skill.index)"
+                @change="setSkillProficient(skill.index, $event.target.checked)"
+                class="w-10 h-10 text-2xl text-center"
+              />
+              <input type="text" readonly :value="formatModifier(skillBonus(skill.index))" class="w-10 h-10 text-2xl text-center border-2"/>
+              <label :for="`skill-${skill.index}`">
+                {{ skill.name }} <span class="text-sm text-gray-500">({{ skillAbilityLabel(skill.index) }})</span>
+                <span v-if="hasExpertise(skill.index) && isSkillProficient(skill.index)" class="text-sm" title="Expertise: proficiency bonus counts twice">★</span>
+              </label>
             </div>
           </div>
           <label>Skills</label>
@@ -158,8 +186,8 @@ onMounted(async () => {
     </div>
     <div>    <!--passive perception, other proficiencies & languages-->
       <div class="flex justify-center-safe items-center gap-10">
-        <input type="number" class=" w-10 h-10 text-2xl text-center" />
-        <label>Passive Perception</label>
+        <input type="number" id="passivePerception" readonly :value="passivePerception()" class=" w-10 h-10 text-2xl text-center" />
+        <label for="passivePerception">Passive Perception</label>
       </div>
       <div class="flex flex-col justify-center items-center gap-2.5">
         <textarea :value="proficienciesAndLanguages" class="w-full min-h-80 border-2 text-lg"></textarea>
