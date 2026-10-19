@@ -5,6 +5,7 @@ import { isSavingThrow, hasClassSkill, otherProficiencies } from '../modules/use
 import { raceBonus, raceLanguages } from '../modules/useSelectedRace.js'
 import { backgroundProficiencies, hasBackgroundSkill } from '../modules/useSelectedBackground.js'
 import {
+  ABILITY_FULL_NAMES,
   abilityInputs,
   abilityMethod,
   chooseMethod,
@@ -57,7 +58,7 @@ onMounted(async () => {
 <template>
   <Main>
     <div class="grid grid-cols-7 gap-4 w-full">
-      <div class="col-span-2 col-start-2 relative min-h-96">
+      <div class="col-span-3 col-start-1 m-6 relative min-h-96">
 
         <!-- top of the column: points left + button to bring the cover back -->
         <div v-if="abilityMethod" class="flex flex-col items-center gap-1 mb-2 text-center">
@@ -69,14 +70,18 @@ onMounted(async () => {
         </div>
 
         <div v-for="ability in abilityScores" :key="ability.index" class="flex-col justify-center items-center gap-2.5 border-2 ">
+          <!-- name of the ability, e.g. "Strength (STR)" -->
+          <label :for="`ability-${ability.index}`" class="block w-full text-center font-bold border-x-2 border-t-2">
+            {{ ABILITY_FULL_NAMES[ability.index] }} <span class="text-xs text-gray-500">({{ ability.name }})</span>
+          </label>
           <p class=" w-full h-18 text-2xl text-center border-2">{{ formatModifier(abilityModifier(ability.index)) }}</p>
-          <input v-model="abilityInputs[ability.index]" :readonly="abilityMethod === 'pointbuy'" :placeholder="ability.name" type="number" id="abilityScoreInput" class="flex justify-center items-center text-center border-x-2 w-full "/>
+          <input v-model="abilityInputs[ability.index]" :readonly="abilityMethod === 'pointbuy'" :placeholder="ability.name" type="number" :id="`ability-${ability.index}`" class="flex justify-center items-center text-center border-x-2 w-full "/>
 
           <!-- rolling: one button per ability -->
           <button v-if="abilityMethod === 'roll'" @click="rollD20(ability.index)" class="w-full border-x-2 border-t-2 text-sm">🎲 d20</button>
 
           <!-- point buy: - and + buttons, and what this score costs -->
-          <div v-if="abilityMethod === 'pointbuy'" class="border-x-2 border-t-2 text-xs text-center">
+          <div v-if="abilityMethod === 'pointbuy'" class="border-x-2 border-t-2 text-m text-center">
             <div class="flex justify-between">
               <button @click="decrease(ability.index)" :disabled="!canDecrease(ability.index)" class="px-2 text-lg disabled:opacity-30">−</button>
               <button @click="increase(ability.index)" :disabled="!canIncrease(ability.index)" class="px-2 text-lg disabled:opacity-30">+</button>
@@ -91,16 +96,16 @@ onMounted(async () => {
         </div>
 
         <!-- point buy: the cost table from the Player's Handbook -->
-        <div v-if="abilityMethod === 'pointbuy'" class="mt-2 text-xs text-center">
+        <div v-if="abilityMethod === 'pointbuy'" class="mt-2 text-lg text-center">
           <p class="font-bold">Cost</p>
           <p v-for="(cost, score) in POINT_COST" :key="score">{{ score }} = {{ cost }} pts</p>
         </div>
 
         <!-- the cover: shows until you pick a method -->
         <div v-if="!abilityMethod" class="absolute inset-0 z-10 bg-paperdarker border-2 border-black rounded-md flex flex-col justify-center items-center gap-2.5 p-1 text-center">
-          <p class="font-bold text-sm">How do you make your scores?</p>
-          <button @click="chooseMethod('roll')" class="border-2 border-black rounded-md px-1 w-full">🎲 Roll dice</button>
-          <button @click="chooseMethod('pointbuy')" class="border-2 border-black rounded-md px-1 w-full">27 point buy</button>
+          <p class="font-bold text-lg">How do you make your scores?</p>
+          <button @click="chooseMethod('roll')" class="border-2 border-black rounded-md px-1 w-full">🎲 Dice Roll</button>
+          <button @click="chooseMethod('pointbuy')" class="border-2 border-black rounded-md px-1 w-full">27 Point Buy</button>
         </div>
       </div>
       <div class="col-span-3 col-start-4"> <!-- gap doesnt work so im going to peel my skin off now, here we go AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA-->

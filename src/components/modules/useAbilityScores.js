@@ -3,6 +3,16 @@ import { raceBonus } from './useSelectedRace.js'
 
 const ABILITIES = ['str', 'dex', 'con', 'int', 'wis', 'cha']
 
+// The API only gives short names like 'STR', so we spell them out for the labels
+export const ABILITY_FULL_NAMES = {
+  str: 'Strength',
+  dex: 'Dexterity',
+  con: 'Constitution',
+  int: 'Intelligence',
+  wis: 'Wisdom',
+  cha: 'Charisma',
+}
+
 // What the player rolled/bought in each ability box, e.g. { str: 15, dex: 14 }
 // This is the score BEFORE bonuses. Shared box, so the middle part can read DEX for armor class.
 export const abilityInputs = ref({})
