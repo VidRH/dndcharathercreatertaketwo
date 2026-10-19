@@ -5,6 +5,7 @@ import { isSavingThrow, hasClassSkill, otherProficiencies } from '../modules/use
 import { raceBonus, raceLanguages } from '../modules/useSelectedRace.js'
 import { backgroundProficiencies, hasBackgroundSkill } from '../modules/useSelectedBackground.js'
 import {
+  ABILITIES,
   ABILITY_FULL_NAMES,
   abilityInputs,
   abilityMethod,
@@ -44,7 +45,10 @@ onMounted(async () => {
   try {
     const data = await  fetchAllOptionsLeftPart()
 
-    abilityScores.value = data.abilityScores
+    // The API sends them A-Z (CHA, CON, DEX...), so put them in character sheet order (STR, DEX, CON...)
+    abilityScores.value = data.abilityScores.sort(
+      (a, b) => ABILITIES.indexOf(a.index) - ABILITIES.indexOf(b.index),
+    )
     skills.value = data.skills
 
   } catch (err) {

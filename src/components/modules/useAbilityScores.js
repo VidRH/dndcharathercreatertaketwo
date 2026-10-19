@@ -2,7 +2,8 @@ import { ref, computed } from 'vue'
 import { raceBonus } from './useSelectedRace.js'
 import { asiBonus } from './useLevelState.js'
 
-const ABILITIES = ['str', 'dex', 'con', 'int', 'wis', 'cha']
+// The order abilities go in on a character sheet
+export const ABILITIES = ['str', 'dex', 'con', 'int', 'wis', 'cha']
 
 // The API only gives short names like 'STR', so we spell them out for the labels
 export const ABILITY_FULL_NAMES = {
