@@ -1,5 +1,7 @@
 <script setup>
-import { selectedClass, hitDice, maxHitPoints } from '../../modules/useSelectedClass.js'
+import { selectedClass } from '../../modules/useSelectedClass.js'
+import { level } from '../../modules/useLevelState.js'
+import { hitDice, maxHitPoints } from '../../modules/useLevel.js'
 import { Speed } from '../../modules/useSelectedRace.js'
 import { armorClass } from '../../modules/useArmorClass.js'
 </script>
@@ -41,7 +43,7 @@ import { armorClass } from '../../modules/useArmorClass.js'
           <div class="w-1/2"> <!--hit dice total, hit dice-->
             <div class="flex justify-center items-center gap-2.5 text-nowrap ">
               <label for="hitdicetotal">hit dice total</label>
-              <input type="number" class="border-2 w-full text-center" placeholder="0" id="hitdicetotal" :value="selectedClass ? 1 : ''"/>
+              <input type="number" class="border-2 w-full text-center" placeholder="0" id="hitdicetotal" :value="selectedClass ? level : ''"/>
             </div>
             <div class="flex flex-col justify-center   items-center gap-2.5 text-nowrap">
               <input type="text" class="border-2 h-20 w-90% text-center " placeholder="0" id="hitdice" :value="hitDice"/>

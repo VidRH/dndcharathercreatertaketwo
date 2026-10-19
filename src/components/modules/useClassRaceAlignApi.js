@@ -27,6 +27,25 @@ export const fetchClassDetails = (index) => fetchDetails('classes', index)
 export const fetchRaceDetails = (index) => fetchDetails('races', index)
 export const fetchBackgroundDetails = (index) => fetchDetails('backgrounds', index)
 export const fetchEquipmentCategory = (index) => fetchDetails('equipment-categories', index)
+export const fetchFeature = (index) => fetchDetails('features', index)
+
+// All 20 levels of a class, e.g. what a fighter gets at level 1, 2, 3...
+// (The API doesn't always send them in order, so we sort them.)
+export async function fetchClassLevels(classIndex) {
+  const levels = await fetchDetails('classes', `${classIndex}/levels`)
+  return levels.filter((entry) => !entry.subclass).sort((a, b) => a.level - b.level)
+}
+
+export async function fetchSubclasses(classIndex) {
+  const data = await fetchDetails('classes', `${classIndex}/subclasses`)
+  return data.results
+}
+
+// The extra features a subclass gives, e.g. Champion gets Improved Critical at level 3
+export async function fetchSubclassLevels(subclassIndex) {
+  const levels = await fetchDetails('subclasses', `${subclassIndex}/levels`)
+  return levels.sort((a, b) => a.level - b.level)
+}
 
 // Remembers items we already looked up, so picking the same class twice doesn't refetch
 const equipmentCache = new Map()

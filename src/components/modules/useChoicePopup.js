@@ -44,6 +44,12 @@ function makePicks(list, howMany, type, label) {
 
 // Turns ONE option, like "(b) leather armor, longbow, and 20 arrows", into { label, grants, picks }
 async function buildOption(option, type) {
+  // Some level-up choices are just plain words, e.g. a ranger's favored enemy 'undead'
+  if (typeof option === 'string') {
+    const name = option.charAt(0).toUpperCase() + option.slice(1)
+    return { label: name, grants: [{ type, index: option, name, count: 1 }], picks: [] }
+  }
+
   switch (option.option_type) {
     case 'counted_reference': // e.g. 20x Arrow
       return {
@@ -82,7 +88,8 @@ async function buildOption(option, type) {
 }
 
 // Turns ONE choice from the API into a question for the popup
-async function buildQuestion(choice) {
+// (also used by the level-up popup for things like Fighting Style)
+export async function buildQuestion(choice) {
   const title = choice.desc ?? choice.from.equipment_category?.name ?? typeTitles[choice.type] ?? choice.type
 
   if (choice.from.option_set_type === 'options_array') {
@@ -122,8 +129,24 @@ export function isQuestionDone(question) {
   )
 }
 
+// Tick/untick an option. With "choose 1" picking a new one swaps it, like a radio button.
+export function toggleOption(question, i) {
+  if (question.selected.includes(i)) {
+    question.selected = question.selected.filter((x) => x !== i)
+  } else if (question.choose === 1) {
+    question.selected = [i]
+  } else if (question.selected.length < question.choose) {
+    question.selected.push(i)
+  }
+}
+
+// A dropdown changed, e.g. "a martial weapon" -> 'longsword'
+export function setPick(pick, value) {
+  pick.value = value
+}
+
 // Collect everything the player ticked/picked into one flat list of grants
-function collectGrants(questions) {
+export function collectGrants(questions) {
   return questions.flatMap((question) =>
     question.selected.flatMap((i) => {
       const option = question.options[i]

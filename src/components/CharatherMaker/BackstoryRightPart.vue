@@ -1,5 +1,5 @@
 <script setup>
-
+import { featuresText } from '../modules/useLevel.js'
 </script>
 
 <template>
@@ -23,7 +23,7 @@
       </div>
     </div>
     <div class=" w-full flex flex-col h-192.5">
-      <textarea id="features&traits" class="border-2 border-black rounded-md mt-2 h-full"></textarea>
+      <textarea id="features&traits" class="border-2 border-black rounded-md mt-2 h-full" :value="featuresText"></textarea>
       <label for="features&traits" class="flex justify-center items-center">Fetures & Traits</label>
      </div>
   </Main>

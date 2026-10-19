@@ -5,6 +5,8 @@ import { fetchAllOptionsTopPart } from '../modules/useClassRaceAlignApi.js'
 import { selectClass } from '../modules/useSelectedClass.js'
 import { selectRace } from '../modules/useSelectedRace.js'
 import { selectBackground } from '../modules/useSelectedBackground.js'
+import { level, experience } from '../modules/useLevelState.js'
+import { setLevel, levelUp, canLevelUp, nextLevelXp, onClassChosen } from '../modules/useLevel.js'
 
 const classes = ref([])
 const races = ref([])
@@ -36,7 +38,8 @@ onMounted(async () => {
 // Runs when you pick a class in the dropdown
 async function onClassChange(event) {
   try {
-    await selectClass(event.target.value)
+    await selectClass(event.target.value) // class popup: skills + gear
+    await onClassChosen() // level popup: fighting style etc. for every level you already are
   } catch (err) {
     error.value = err.message
     console.error('Error selecting class:', err) //dont ship its just for debugging
@@ -60,6 +63,26 @@ async function onBackgroundChange(event) {
   } catch (err) {
     error.value = err.message
     console.error('Error selecting background:', err) //dont ship its just for debugging
+  }
+}
+
+// Runs when you type a level. setLevel keeps it between 1 and 20,
+// so we put the real level back in the box in case you typed something like 25.
+async function onLevelChange(event) {
+  try {
+    const leveling = setLevel(Number(event.target.value))
+    event.target.value = level.value
+    await leveling
+  } catch (err) {
+    error.value = err.message
+  }
+}
+
+async function onLevelUpClick() {
+  try {
+    await levelUp()
+  } catch (err) {
+    error.value = err.message
   }
 }
 
@@ -90,7 +113,7 @@ async function onBackgroundChange(event) {
               </div>
               <div>              <!-- level input -->
                 <P>lvl</P>
-                <input type="number" placeholder="1" class="border-2 border-black rounded-md p-1 m-1 w-10 h-10" /> <!-- level input --->
+                <input type="number" min="1" max="20" :value="level" @change="onLevelChange" class="border-2 border-black rounded-md p-1 m-1 w-14 h-10" /> <!-- level input --->
               </div>
             </div>
 
@@ -132,7 +155,12 @@ async function onBackgroundChange(event) {
 
             <div>              <!-- xp input -->
               <p>Experience Points</p>
-              <Input type="number" placeholder="xp" class="border-2 border-black rounded-md p-1 m-1 w-60 h-10" />
+              <div class="flex items-center">
+                <input type="number" min="0" v-model.number="experience" placeholder="xp" class="border-2 border-black rounded-md p-1 m-1 w-40 h-10" />
+                <!-- only shows when you have enough XP for the next level -->
+                <button v-if="canLevelUp" @click="onLevelUpClick" class="border-2 border-black rounded-md px-2 h-10 bg-black text-white">⬆ Level up!</button>
+              </div>
+              <p v-if="nextLevelXp !== null" class="text-xs text-gray-500">next level at {{ nextLevelXp }} XP</p>
             </div>
           </div>
       </div>

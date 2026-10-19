@@ -4,6 +4,7 @@ import CharatherMakerLeftPart from '../components/CharatherMaker/AttributesLeftP
 import CharatherMakerMiddlePart from '../components/CharatherMaker/ArmorInventoryMiddlePart.vue'
 import CharatherMakerRightPart from '../components/CharatherMaker/BackstoryRightPart.vue'
 import ChoicePopup from '../components/CharatherMaker/ChoicePopup.vue'
+import LevelUpPopup from '../components/CharatherMaker/LevelUpPopup.vue'
 
 </script>
 
@@ -17,6 +18,7 @@ import ChoicePopup from '../components/CharatherMaker/ChoicePopup.vue'
       <CharatherMakerRightPart class="w-1/3 col-span-1 col-start-3  "/> <!--personality traits, ideal, bond, flaw, features & traits-->
     </div>
     <ChoicePopup /> <!-- only shows up while you're picking class/race/background options -->
+    <LevelUpPopup /> <!-- only shows up when you gain a level -->
   </Main>
 </template>
 

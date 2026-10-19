@@ -23,6 +23,7 @@ import {
   abilityModifier,
   formatModifier,
 } from '../modules/useAbilityScores.js'
+import { proficiencyBonus, asiBonus } from '../modules/useLevelState.js'
 
 // Glue the class, race and background text together for the big textarea (skip empty ones)
 const proficienciesAndLanguages = computed(() =>
@@ -92,7 +93,8 @@ onMounted(async () => {
 
           <!-- bonuses go on top and never cost points -->
           <p v-if="raceBonus(ability.index) > 0" class="text-lg text-center text-gray-500 border-x-2 border-t-2">race +{{ raceBonus(ability.index) }}</p>
-          <p v-if="raceBonus(ability.index) > 0" class="text-sm text-center border-x-2 border-t-2">total {{ abilityTotal(ability.index) }}</p>
+          <p v-if="asiBonus(ability.index) > 0" class="text-lg text-center text-gray-500 border-x-2 border-t-2">level +{{ asiBonus(ability.index) }}</p>
+          <p v-if="raceBonus(ability.index) > 0 || asiBonus(ability.index) > 0" class="text-sm text-center border-x-2 border-t-2">total {{ abilityTotal(ability.index) }}</p>
         </div>
 
         <!-- point buy: the cost table from the Player's Handbook -->
@@ -116,7 +118,8 @@ onMounted(async () => {
             <label>Inspiration</label>
           </div>
           <div class="flex  items-center gap-2.5">
-            <input type="number" class=" w-10 h-10 text-2xl text-center border-2" placeholder="+2"/>
+            <!-- goes up by itself as you level: +2, +3 at level 5, +4 at level 9... -->
+            <input type="text" readonly :value="formatModifier(proficiencyBonus)" class=" w-10 h-10 text-2xl text-center border-2"/>
             <label>Proficiency Bonus </label>
           </div>
         </div>

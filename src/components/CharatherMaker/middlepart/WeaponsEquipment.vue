@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { classItems } from '../../modules/useSelectedClass.js'
 import { backgroundItems, backgroundMoney } from '../../modules/useSelectedBackground.js'
 import { mergeItems, isWeapon, weaponRow, gearLine } from '../../modules/useEquipment.js'
+import { combatStats } from '../../modules/useLevel.js'
 
 // Class gear + background gear in one pile (doubles added together)
 const allItems = computed(() => mergeItems([...classItems.value, ...backgroundItems.value]))
@@ -48,8 +49,8 @@ const money = computed(() => {
             <label for="weapondamagekind0" class="text-nowrap">Weapon Damage Kind</label>
             <input v-for="(row, i) in weaponRows" :key="i" :value="row.damageType" type="text" class="border w-full" placeholder="0" :id="`weapondamagekind${i}`"/>
           </div>
-          <div class="col-start-1 col-span-5"> <!-- free space for spells / attack notes -->
-            <textarea class="w-full min-h-80 border-2"></textarea>
+          <div class="col-start-1 col-span-5"> <!-- combat stats from your class: rage, ki, sneak attack... -->
+            <textarea class="w-full min-h-80 border-2" :value="combatStats"></textarea>
           </div>
         </div>
         <label for="attacks" class="flex justify-center items-center">attacks and spellcasting</label>

@@ -1,5 +1,6 @@
 import { ref, computed } from 'vue'
 import { raceBonus } from './useSelectedRace.js'
+import { asiBonus } from './useLevelState.js'
 
 const ABILITIES = ['str', 'dex', 'con', 'int', 'wis', 'cha']
 
@@ -87,9 +88,10 @@ export function decrease(abilityIndex) {
 // ---------------------------------------------------------------------------
 
 // All bonuses added ON TOP of the rolled/bought score, so they never cost points.
-// In the 2014 rules only your race gives ability bonuses (classes and backgrounds don't).
+// In the 2014 rules that's your race + Ability Score Improvements from leveling up
+// (classes and backgrounds don't give any).
 export function abilityBonus(abilityIndex) {
-  return raceBonus(abilityIndex)
+  return raceBonus(abilityIndex) + asiBonus(abilityIndex)
 }
 
 // Rolled/bought score + bonuses. An empty box counts as 10 (a totally average person).

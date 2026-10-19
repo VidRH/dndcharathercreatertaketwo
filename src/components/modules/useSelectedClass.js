@@ -55,14 +55,4 @@ export const otherProficiencies = computed(() => {
   return [...always, ...picked].map((prof) => prof.name).join('\n')
 })
 
-// Middle part: e.g. '1d10' for a level 1 fighter
-export const hitDice = computed(() => {
-  if (!selectedClass.value) return ''
-  return `1d${selectedClass.value.hit_die}`
-})
-
-// Middle part: at level 1 your max HP is the full hit die (plus CON modifier later)
-export const maxHitPoints = computed(() => {
-  if (!selectedClass.value) return ''
-  return selectedClass.value.hit_die
-})
+// (Hit dice and max HP depend on your level, so they live in useLevel.js now)
