@@ -64,7 +64,7 @@ function asiTooHigh(page, slot, abilityIndex) {
               :disabled="page.hp.roll !== null"
               class="border-2 border-black rounded-md px-2 disabled:opacity-40"
             >
-              🎲 Roll
+              Roll
             </button>
             <b v-if="page.hp.mode === 'roll' && page.hp.roll !== null">you rolled {{ page.hp.roll }}</b>
           </label>

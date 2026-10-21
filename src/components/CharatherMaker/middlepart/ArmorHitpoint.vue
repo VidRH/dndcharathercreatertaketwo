@@ -8,7 +8,7 @@ import { armorClass } from '../../modules/useArmorClass.js'
 
 
 <template>
-  <Main>
+  <main>
     <div class="flex flex-col gap-6">
       <div class="flex justify-center items-center gap-2.5"> <!--armoor class, intitiative, speed-->
         <div class="w-1/3  flex justify-center">
@@ -66,7 +66,7 @@ import { armorClass } from '../../modules/useArmorClass.js'
         </div>
       </div>
     </div>
-  </Main>
+  </main>
 </template>
 
 

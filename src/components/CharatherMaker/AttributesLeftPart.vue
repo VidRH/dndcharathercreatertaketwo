@@ -2,7 +2,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { fetchAllOptionsLeftPart } from '../modules/useAbilityScoresApi.js'
 import { otherProficiencies } from '../modules/useSelectedClass.js'
-import { raceBonus, raceLanguages } from '../modules/useSelectedRace.js'
+import { raceBonus, raceLanguages, raceProficiencies } from '../modules/useSelectedRace.js'
 import { backgroundProficiencies } from '../modules/useSelectedBackground.js'
 import {
   ABILITIES,
@@ -39,7 +39,7 @@ import {
 
 // Glue the class, race and background text together for the big textarea (skip empty ones)
 const proficienciesAndLanguages = computed(() =>
-  [otherProficiencies.value, backgroundProficiencies.value, raceLanguages.value]
+  [otherProficiencies.value, backgroundProficiencies.value, raceProficiencies.value, raceLanguages.value]
     .filter((text) => text !== '')
     .join('\n'),
 )
@@ -72,7 +72,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <Main>
+  <main>
     <div class="grid grid-cols-7 gap-4 w-full">
       <div class="col-span-3 col-start-1 m-6 relative min-h-96">
 
@@ -94,13 +94,13 @@ onMounted(async () => {
           <input v-model="abilityInputs[ability.index]" :readonly="abilityMethod === 'pointbuy'" :placeholder="ability.name" type="number" :id="`ability-${ability.index}`" class="flex justify-center items-center text-center border-x-2 w-full "/>
 
           <!-- rolling: one button per ability -->
-          <button v-if="abilityMethod === 'roll'" @click="rollD20(ability.index)" class="w-full border-x-2 border-t-2 text-sm">🎲 d20</button>
+          <button v-if="abilityMethod === 'roll'" @click="rollD20(ability.index)" class="w-full border-x-2 border-t-2 text-sm">Roll a d20</button>
 
           <!-- point buy: - and + buttons, and what this score costs -->
           <div v-if="abilityMethod === 'pointbuy'" class="border-x-2 border-t-2 text-m text-center">
             <div class="flex justify-between">
-              <button @click="decrease(ability.index)" :disabled="!canDecrease(ability.index)" class="px-2 text-lg disabled:opacity-30">−</button>
-              <button @click="increase(ability.index)" :disabled="!canIncrease(ability.index)" class="px-2 text-lg disabled:opacity-30">+</button>
+              <button @click="decrease(ability.index)" :disabled="!canDecrease(ability.index)" class="px-2 text-4xl disabled:opacity-30">−</button>
+              <button @click="increase(ability.index)" :disabled="!canIncrease(ability.index)" class="px-2 text-4xl disabled:opacity-30">+</button>
             </div>
             <p>costs {{ POINT_COST[abilityInputs[ability.index]] }} pts</p>
             <p>{{ costOfNextPoint(ability.index) === null ? 'max is 15' : `next +1: ${costOfNextPoint(ability.index)} pts` }}</p>
@@ -109,7 +109,8 @@ onMounted(async () => {
           <!-- bonuses go on top and never cost points -->
           <p v-if="raceBonus(ability.index) > 0" class="text-lg text-center text-gray-500 border-x-2 border-t-2">race +{{ raceBonus(ability.index) }}</p>
           <p v-if="asiBonus(ability.index) > 0" class="text-lg text-center text-gray-500 border-x-2 border-t-2">level +{{ asiBonus(ability.index) }}</p>
-          <p v-if="raceBonus(ability.index) > 0 || asiBonus(ability.index) > 0" class="text-sm text-center border-x-2 border-t-2">total {{ abilityTotal(ability.index) }}</p>
+          <!-- always shown: your score + all bonuses (this is the number the modifier above comes from) -->
+          <p class="text-lg font-bold bg-paperdarker text-center border-x-2 border-t-2">total {{ abilityTotal(ability.index) }}</p>
         </div>
 
         <!-- point buy: the cost table from the Player's Handbook -->
@@ -121,7 +122,7 @@ onMounted(async () => {
         <!-- the cover: shows until you pick a method -->
         <div v-if="!abilityMethod" class="absolute inset-0 z-10 bg-paperdarker border-2 border-black rounded-md flex flex-col justify-center items-center gap-2.5 p-1 text-center">
           <p class="font-bold text-lg">How do you make your scores?</p>
-          <button @click="chooseMethod('roll')" class="border-2 border-black rounded-md px-1 w-full">🎲 Dice Roll</button>
+          <button @click="chooseMethod('roll')" class="border-2 border-black rounded-md px-1 w-full">Dice Roll</button>
           <button @click="chooseMethod('pointbuy')" class="border-2 border-black rounded-md px-1 w-full">27 Point Buy</button>
         </div>
       </div>
@@ -172,7 +173,7 @@ onMounted(async () => {
                 class="w-10 h-10 text-2xl text-center"
               />
               <input type="text" readonly :value="formatModifier(skillBonus(skill.index))" class="w-10 h-10 text-2xl text-center border-2"/>
-              <label :for="`skill-${skill.index}`">
+              <label :for="`skill-${skill.index}`" class="text-nowrap">
                 {{ skill.name }} <span class="text-sm text-gray-500">({{ skillAbilityLabel(skill.index) }})</span>
                 <span v-if="hasExpertise(skill.index) && isSkillProficient(skill.index)" class="text-sm" title="Expertise: proficiency bonus counts twice">★</span>
               </label>
@@ -194,7 +195,7 @@ onMounted(async () => {
         <label>Other Proficiencies & Languages</label>
       </div>
     </div>
-  </Main>
+  </main>
 </template>
 
 <style scoped></style>

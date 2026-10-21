@@ -28,6 +28,7 @@ export const fetchRaceDetails = (index) => fetchDetails('races', index)
 export const fetchBackgroundDetails = (index) => fetchDetails('backgrounds', index)
 export const fetchEquipmentCategory = (index) => fetchDetails('equipment-categories', index)
 export const fetchFeature = (index) => fetchDetails('features', index)
+export const fetchTrait = (index) => fetchDetails('traits', index)
 
 // All 20 levels of a class, e.g. what a fighter gets at level 1, 2, 3...
 // (The API doesn't always send them in order, so we sort them.)

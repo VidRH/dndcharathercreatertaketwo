@@ -37,3 +37,7 @@ __screenshots__/
 
 # Vite
 *.timestamp-*-*.mjs
+
+
+# Firebase config (keep it off GitHub)
+src/firebase.js

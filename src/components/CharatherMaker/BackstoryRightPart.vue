@@ -1,9 +1,17 @@
 <script setup>
+import { computed } from 'vue'
 import { featuresText } from '../modules/useLevel.js'
+
+import { raceTraitsText } from '../modules/useSelectedRace.js'
+
+// Class features first, then race traits, with an empty line between (skip empty ones)
+const featuresAndTraits = computed(() =>
+  [featuresText.value, raceTraitsText.value].filter((text) => text !== '').join('\n\n'),
+)
 </script>
 
 <template>
-  <Main class="w-1/3 ">
+  <main class="w-1/3 ">
     <div class="w-full">
       <div class=" w-full flex flex-col  h-50">
           <textarea id="personalityTraits" class="border-2 border-black rounded-md mt-2 h-full"></textarea>
@@ -23,10 +31,10 @@ import { featuresText } from '../modules/useLevel.js'
       </div>
     </div>
     <div class=" w-full flex flex-col h-192.5">
-      <textarea id="features&traits" class="border-2 border-black rounded-md mt-2 h-full" :value="featuresText"></textarea>
+      <textarea id="features&traits" class="border-2 border-black rounded-md mt-2 h-full" :value="featuresAndTraits"></textarea>
       <label for="features&traits" class="flex justify-center items-center">Fetures & Traits</label>
      </div>
-  </Main>
+  </main>
 </template>
 
 <style scoped></style>

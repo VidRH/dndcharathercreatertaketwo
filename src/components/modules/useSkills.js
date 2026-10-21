@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { isSavingThrow, hasClassSkill } from './useSelectedClass.js'
-import { selectedRace } from './useSelectedRace.js'
+import { hasRaceSkill  } from './useSelectedRace.js'
 import { hasBackgroundSkill } from './useSelectedBackground.js'
 import { abilityModifier } from './useAbilityScores.js'
 import { proficiencyBonus, expertise } from './useLevelState.js'
@@ -44,10 +44,7 @@ export const saveOverrides = ref({})
 
 // Proficient because of your class, background or race (without your own clicks)
 function autoSkill(skillIndex) {
-  const elfKeenSenses =
-    skillIndex === 'perception' &&
-    selectedRace.value?.traits.some((trait) => trait.index === 'keen-senses')
-  return hasBackgroundSkill(skillIndex) || hasClassSkill(skillIndex) || Boolean(elfKeenSenses)
+   return hasBackgroundSkill(skillIndex) || hasClassSkill(skillIndex) || hasRaceSkill(skillIndex)
 }
 
 export function isSkillProficient(skillIndex) {

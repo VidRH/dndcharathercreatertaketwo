@@ -1,6 +1,6 @@
 import { computed } from 'vue'
 import { selectedClass, classChoices } from './useSelectedClass.js'
-import { selectedRace, raceChoices } from './useSelectedRace.js'
+import { selectedRace, raceChoices, raceTraits  } from './useSelectedRace.js'
 import { selectedBackground, backgroundChoices } from './useSelectedBackground.js'
 import { levelChoices } from './useLevelState.js'
 
@@ -16,6 +16,7 @@ export const alreadyKnown = computed(() => {
   selectedRace.value?.languages.forEach((lang) => known.add(lang.index))
   selectedClass.value?.proficiencies.forEach((prof) => known.add(prof.index))
   selectedBackground.value?.starting_proficiencies.forEach((prof) => known.add(prof.index))
+  raceTraits.value.forEach((trait) => trait.proficiencies.forEach((prof) => known.add(prof.index)))
 
   // Things you picked in earlier popups (including level-ups, e.g. a fighting style)
   const levelGrants = Object.values(levelChoices.value).flatMap((choice) => choice.grants)
