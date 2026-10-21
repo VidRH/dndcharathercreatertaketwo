@@ -16,7 +16,7 @@ async function logIn() {
   error.value = ''
   try {
     await signInWithEmailAndPassword(auth, email.value, password.value)
-    router.push('/CharatherMaker')
+    router.push('/MyCharacters')
   } catch (e) {
     error.value = e.message
   }
@@ -26,7 +26,7 @@ async function signUp() {
   error.value = ''
   try {
     await createUserWithEmailAndPassword(auth, email.value, password.value)
-    router.push('/CharatherMaker')
+    router.push('/MyCharacters')
   } catch (e) {
     error.value = e.message
   }
