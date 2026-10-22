@@ -5,12 +5,13 @@ import CharatherMakerMiddlePart from '../components/CharatherMaker/ArmorInventor
 import CharatherMakerRightPart from '../components/CharatherMaker/BackstoryRightPart.vue'
 import ChoicePopup from '../components/CharatherMaker/ChoicePopup.vue'
 import LevelUpPopup from '../components/CharatherMaker/LevelUpPopup.vue'
-
+import BackgroundPage from '../components/CharatherMaker/backgroundpage/BackgroundPage.vue'
+import SpellcastingPage from '../components/CharatherMaker/spellcastingpage/SpellcastingPage.vue'
 </script>
 
 
 <template>
-  <Main>
+  <main>
     <CharatherMakerTopPart class="w-80% my-7" /> <!--includes: name, class, race, level , xp ,background, alignment -->
     <div class="flex flex-rows justify-between flex-nonwrap  w-80%"> <!--grid for the left, middle and right parts-->
       <CharatherMakerLeftPart class="w-1/3 col-span-1 col-start-1 "/> <!-- includes: attributes, saving throws, profeciency bonus, inspiration, skills,  passive preception, other proficiencies -->
@@ -19,7 +20,14 @@ import LevelUpPopup from '../components/CharatherMaker/LevelUpPopup.vue'
     </div>
     <ChoicePopup /> <!-- only shows up while you're picking class/race/background options -->
     <LevelUpPopup /> <!-- only shows up when you gain a level -->
-  </Main>
+
+    <div>
+      <BackgroundPage /> <!-- includes: name, age, height, weight, eyes, skin, hair -->
+    </div>
+    <div>
+      <SpellcastingPage /> <!-- includes: spellcasting class, spellcasting ability, spell save dc, spell attack bonus, spells known, spell slots -->
+    </div>
+  </main>
 </template>
 
 
