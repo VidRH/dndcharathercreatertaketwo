@@ -1,5 +1,7 @@
 <script setup>
 import { ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { saveCharacter } from '../components/modules/useSavedCharacters.js'
 import CharatherMakerTopPart from '../components/CharatherMaker/NameHeaderTopPart.vue'
 import CharatherMakerLeftPart from '../components/CharatherMaker/AttributesLeftPart.vue'
 import CharatherMakerMiddlePart from '../components/CharatherMaker/ArmorInventoryMiddlePart.vue'
@@ -16,6 +18,25 @@ const pages = [
   { id: 'spells', label: 'Spells' },
 ]
 const currentPage = ref('sheet')
+
+const route = useRoute()
+const router = useRouter()
+
+// '' = nothing yet, 'saving', 'saved', or an error message
+const saveStatus = ref('')
+
+async function onSave() {
+  saveStatus.value = 'saving'
+  try {
+    const id = await saveCharacter(route.params.id)
+    // First save: put the new id in the URL, so the next save updates this character
+    if (!route.params.id) await router.replace(`/CharatherMaker/${id}`)
+    saveStatus.value = 'saved'
+  } catch (err) {
+    saveStatus.value = err.message
+    console.error('Error saving character:', err) //dont ship its just for debugging
+  }
+}
 </script>
 
 
@@ -32,6 +53,16 @@ const currentPage = ref('sheet')
       >
         {{ page.label }}
       </button>
+
+      <button
+        @click="onSave"
+        :disabled="saveStatus === 'saving'"
+        class="border-2 border-black rounded-md px-4 py-1 text-lg cursor-pointer bg-black text-white disabled:opacity-50"
+      >
+        {{ saveStatus === 'saving' ? 'Saving...' : 'Save' }}
+      </button>
+      <p v-if="saveStatus === 'saved'" class="self-center text-green-700">Saved!</p>
+      <p v-else-if="saveStatus !== '' && saveStatus !== 'saving'" class="self-center text-red-600">{{ saveStatus }}</p>
     </nav>
 
     <!--

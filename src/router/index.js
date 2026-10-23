@@ -26,7 +26,11 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
-      path: '/CharatherMaker',
+      // The ? makes the id optional:
+      //   /CharatherMaker         -> a brand new character
+      //   /CharatherMaker/abc123  -> the saved character with id abc123
+      // One route for both, so the page stays open when the id gets added after the first save
+      path: '/CharatherMaker/:id?',
       name: 'CharatherMaker',
       component: CharatherMaker,
       meta: { requiresAuth: true },
