@@ -1,10 +1,10 @@
 <script setup>
 
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { fetchAllOptionsTopPart } from '../modules/useClassRaceAlignApi.js'
-import { selectClass } from '../modules/useSelectedClass.js'
-import { selectRace } from '../modules/useSelectedRace.js'
-import { selectBackground } from '../modules/useSelectedBackground.js'
+import { selectedClass, selectClass } from '../modules/useSelectedClass.js'
+import { selectedRace, selectRace } from '../modules/useSelectedRace.js'
+import { selectedBackground, selectBackground } from '../modules/useSelectedBackground.js'
 import { level, experience } from '../modules/useLevelState.js'
 import { setLevel, levelUp, canLevelUp, nextLevelXp, onClassChosen } from '../modules/useLevel.js'
 import { characterName, playerName, alignment } from '../modules/useCharacterInfo.js'
@@ -37,10 +37,27 @@ onMounted(async () => {
   }
 })
 
+// What the class/race/background dropdowns show. A computed with a get AND a set:
+//   get: show whatever is in the shared box (so a loaded character shows up in the dropdown)
+//   set: you picked something -> run the same code as before (popups and all)
+// v-model on a <select> also puts the right option back when the options arrive from the API late.
+const classIndex = computed({
+  get: () => selectedClass.value?.index ?? '',
+  set: (index) => onClassChange(index),
+})
+const raceIndex = computed({
+  get: () => selectedRace.value?.index ?? '',
+  set: (index) => onRaceChange(index),
+})
+const backgroundIndex = computed({
+  get: () => selectedBackground.value?.index ?? '',
+  set: (index) => onBackgroundChange(index),
+})
+
 // Runs when you pick a class in the dropdown
-async function onClassChange(event) {
+async function onClassChange(index) {
   try {
-    await selectClass(event.target.value) // class popup: skills + gear
+    await selectClass(index) // class popup: skills + gear
     await loadClassSpells() // the spells this class can learn, for the spell page
     await onClassChosen() // level popup: fighting style etc. for every level you already are
   } catch (err) {
@@ -50,9 +67,9 @@ async function onClassChange(event) {
 }
 
 // Runs when you pick a race in the dropdown
-async function onRaceChange(event) {
+async function onRaceChange(index) {
   try {
-    await selectRace(event.target.value)
+    await selectRace(index)
   } catch (err) {
     error.value = err.message
     console.error('Error selecting race:', err) //dont ship its just for debugging
@@ -60,9 +77,9 @@ async function onRaceChange(event) {
 }
 
 // Runs when you pick a background in the dropdown
-async function onBackgroundChange(event) {
+async function onBackgroundChange(index) {
   try {
-    await selectBackground(event.target.value)
+    await selectBackground(index)
   } catch (err) {
     error.value = err.message
     console.error('Error selecting background:', err) //dont ship its just for debugging
@@ -107,8 +124,8 @@ async function onLevelUpClick() {
             <div class="flex justify-center items-center"> <!-- class select has to call in classes from api and populate the options plus lvl for good measure-->
               <div>
                 <P>Class</P>    <!-- class select has to call in classes from api and populate the options--->
-                <select @change="onClassChange" class="border-2 border-black rounded-md p-1 m-1 w-48 h-10">
-                  <option value="" disabled selected>Select Class</option>
+                <select v-model="classIndex" class="border-2 border-black rounded-md p-1 m-1 w-48 h-10">
+                  <option value="" disabled>Select Class</option>
                   <option v-for="cls in classes" :key="cls.index" :value="cls.index">
                     {{ cls.name }}
                   </option>
@@ -122,8 +139,8 @@ async function onLevelUpClick() {
 
             <div>             <!-- background select has to call in backgrounds from api and populate the options--->
               <P>Background</P>
-              <select @change="onBackgroundChange" class="border-2 border-black rounded-md p-1 m-1 w-60 h-10">
-                <option value="" disabled selected>Select Background</option>
+              <select v-model="backgroundIndex" class="border-2 border-black rounded-md p-1 m-1 w-60 h-10">
+                <option value="" disabled>Select Background</option>
                 <option v-for="background in backgrounds" :key="background.index" :value="background.index">
                   {{ background.name }}
                 </option>
@@ -138,8 +155,8 @@ async function onLevelUpClick() {
 
             <div>             <!-- race select has to call in races from api and populate the options--->
               <p>Race</p>
-              <select @change="onRaceChange" class="border-2 border-black rounded-md p-1 m-1 w-60 h-10">
-                <option value="" disabled selected>Select Race</option>
+              <select v-model="raceIndex" class="border-2 border-black rounded-md p-1 m-1 w-60 h-10">
+                <option value="" disabled>Select Race</option>
                 <option v-for="race in races" :key="race.index" :value="race.index">
                   {{ race.name }}
                 </option>

@@ -2,7 +2,6 @@
 import { ref, onMounted } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { listCharacters, deleteCharacter } from '../components/modules/useSavedCharacters.js'
-import { resetCharacter } from '../components/modules/useCharacterData.js'
 
 const router = useRouter()
 
@@ -21,9 +20,8 @@ onMounted(async () => {
   }
 })
 
-// The sheet keeps the last character in its shared boxes, so wipe it first
+// No id in the URL = the maker wipes the sheet for a new character
 function newCharacter() {
-  resetCharacter()
   router.push('/CharatherMaker')
 }
 

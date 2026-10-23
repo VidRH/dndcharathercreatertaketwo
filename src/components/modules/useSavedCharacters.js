@@ -11,9 +11,9 @@ import {
   serverTimestamp,
 } from 'firebase/firestore'
 import { db, auth } from '@/firebase'
-import { getCharacterData } from './useCharacterData.js'
+import { getCharacterData, loadCharacterData } from './useCharacterData.js'
 
-// Talking to Firestore: saving, listing and deleting characters (and later: loading one).
+// Talking to Firestore: saving, loading, listing and deleting characters.
 
 // Every user has their own folder of characters: users/{their uid}/characters
 function charactersFolder() {
@@ -34,6 +34,13 @@ export async function saveCharacter(id) {
 
   const newCharacter = await addDoc(charactersFolder(), { ...data, createdAt: serverTimestamp() })
   return newCharacter.id
+}
+
+// Gets one saved character and puts it on the sheet
+export async function loadCharacter(id) {
+  const savedDoc = await getDoc(doc(charactersFolder(), id))
+  if (!savedDoc.exists()) throw new Error("This character doesn't exist (maybe it was deleted).")
+  loadCharacterData(savedDoc.data())
 }
 
 // All your characters, last edited first.

@@ -1,7 +1,8 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { saveCharacter } from '../components/modules/useSavedCharacters.js'
+import { saveCharacter, loadCharacter } from '../components/modules/useSavedCharacters.js'
+import { resetCharacter } from '../components/modules/useCharacterData.js'
 import CharatherMakerTopPart from '../components/CharatherMaker/NameHeaderTopPart.vue'
 import CharatherMakerLeftPart from '../components/CharatherMaker/AttributesLeftPart.vue'
 import CharatherMakerMiddlePart from '../components/CharatherMaker/ArmorInventoryMiddlePart.vue'
@@ -25,12 +26,49 @@ const router = useRouter()
 // '' = nothing yet, 'saving', 'saved', or an error message
 const saveStatus = ref('')
 
+// '' = ready, 'loading', or an error message
+const loadStatus = ref('')
+
+// The id WE put in the URL after a first save. That character is already on the sheet,
+// so there's no need to load it again.
+let justSavedId = null
+
+// Look at the id in the URL (when the page opens, and whenever it changes):
+//   no id   -> blank sheet for a new character
+//   an id   -> get that character from Firestore and put it on the sheet
+watch(
+  () => route.params.id,
+  async (id) => {
+    if (id && id === justSavedId) return
+    saveStatus.value = ''
+
+    if (!id) {
+      resetCharacter()
+      loadStatus.value = ''
+      return
+    }
+
+    loadStatus.value = 'loading'
+    try {
+      await loadCharacter(id)
+      loadStatus.value = ''
+    } catch (err) {
+      loadStatus.value = err.message
+      console.error('Error loading character:', err) //dont ship its just for debugging
+    }
+  },
+  { immediate: true },
+)
+
 async function onSave() {
   saveStatus.value = 'saving'
   try {
     const id = await saveCharacter(route.params.id)
     // First save: put the new id in the URL, so the next save updates this character
-    if (!route.params.id) await router.replace(`/CharatherMaker/${id}`)
+    if (!route.params.id) {
+      justSavedId = id
+      await router.replace(`/CharatherMaker/${id}`)
+    }
     saveStatus.value = 'saved'
   } catch (err) {
     saveStatus.value = err.message
@@ -56,12 +94,15 @@ async function onSave() {
 
       <button
         @click="onSave"
-        :disabled="saveStatus === 'saving'"
+        :disabled="saveStatus === 'saving' || loadStatus !== ''"
+        title="Can't save while the character is loading (or didn't load), or it would overwrite the saved one"
         class="border-2 border-black rounded-md px-4 py-1 text-lg cursor-pointer bg-black text-white disabled:opacity-50"
       >
         {{ saveStatus === 'saving' ? 'Saving...' : 'Save' }}
       </button>
-      <p v-if="saveStatus === 'saved'" class="self-center text-green-700">Saved!</p>
+      <p v-if="loadStatus === 'loading'" class="self-center">Loading character...</p>
+      <p v-else-if="loadStatus !== ''" class="self-center text-red-600">{{ loadStatus }}</p>
+      <p v-else-if="saveStatus === 'saved'" class="self-center text-green-700">Saved!</p>
       <p v-else-if="saveStatus !== '' && saveStatus !== 'saving'" class="self-center text-red-600">{{ saveStatus }}</p>
     </nav>
 
