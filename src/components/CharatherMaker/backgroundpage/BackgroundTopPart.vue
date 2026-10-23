@@ -1,5 +1,5 @@
 <script setup>
-import { characterName } from '../../modules/useCharacterInfo.js'
+import { characterName, age, height, weight, eyes, hair, skin } from '../../modules/useCharacterInfo.js'
 </script>
 
 <template>
@@ -12,29 +12,29 @@ import { characterName } from '../../modules/useCharacterInfo.js'
       <div class="flex">
         <label class="flex flex-col">
           Age
-          <input placeholder="Age" class="border-2 border-black rounded-md p-1 m-1 w-60 h-10">
+          <input v-model="age" placeholder="Age" class="border-2 border-black rounded-md p-1 m-1 w-60 h-10">
         </label>
         <label class="flex flex-col">
           height
-          <input placeholder="Height" class="border-2 border-black rounded-md p-1 m-1 w-60 h-10">
+          <input v-model="height" placeholder="Height" class="border-2 border-black rounded-md p-1 m-1 w-60 h-10">
         </label>
         <label class="flex flex-col">
           Weight
-          <input placeholder="Weight" class="border-2 border-black rounded-md p-1 m-1 w-60 h-10">
+          <input v-model="weight" placeholder="Weight" class="border-2 border-black rounded-md p-1 m-1 w-60 h-10">
         </label>
       </div>
       <div class="flex">
         <label class="flex flex-col">
           Eyes
-          <input placeholder="Eyes" class="border-2 border-black rounded-md p-1 m-1 w-60 h-10">
+          <input v-model="eyes" placeholder="Eyes" class="border-2 border-black rounded-md p-1 m-1 w-60 h-10">
         </label>
         <label class="flex flex-col">
           Hair
-          <input placeholder="Hair" class="border-2 border-black rounded-md p-1 m-1 w-60 h-10">
+          <input v-model="hair" placeholder="Hair" class="border-2 border-black rounded-md p-1 m-1 w-60 h-10">
         </label>
         <label class="flex flex-col">
           Skin
-          <input placeholder="Skin" class="border-2 border-black rounded-md p-1 m-1 w-60 h-10">
+          <input v-model="skin" placeholder="Skin" class="border-2 border-black rounded-md p-1 m-1 w-60 h-10">
         </label>
       </div>
 

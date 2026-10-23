@@ -36,6 +36,7 @@ import {
   saveBonus,
   passivePerception,
 } from '../modules/useSkills.js'
+import { inspiration } from '../modules/useCharacterInfo.js'
 
 // Glue the class, race and background text together for the big textarea (skip empty ones)
 const proficienciesAndLanguages = computed(() =>
@@ -130,7 +131,7 @@ onMounted(async () => {
         <!---->
         <div class="flex-col justify-between items-center">
           <div class="flex  items-center gap-2.5">
-            <input type="checkbox" class="w-10 h-10"/>
+            <input v-model="inspiration" type="checkbox" class="w-10 h-10"/>
             <label>Inspiration</label>
           </div>
           <div class="flex  items-center gap-2.5">

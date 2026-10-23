@@ -7,8 +7,8 @@ import { selectRace } from '../modules/useSelectedRace.js'
 import { selectBackground } from '../modules/useSelectedBackground.js'
 import { level, experience } from '../modules/useLevelState.js'
 import { setLevel, levelUp, canLevelUp, nextLevelXp, onClassChosen } from '../modules/useLevel.js'
+import { characterName, playerName, alignment } from '../modules/useCharacterInfo.js'
 import { loadClassSpells } from '../modules/useSpells.js'
-import { characterName } from '../modules/useCharacterInfo.js'
 
 const classes = ref([])
 const races = ref([])
@@ -133,7 +133,7 @@ async function onLevelUpClick() {
 
             <div>             <!-- player name input, or player account name will be put here -->
               <p>Player Name</p>
-              <input type="text" placeholder="Player Name" class="border-2 border-black rounded-md p-1 m-1 w-60 h-10" />
+              <input v-model="playerName" type="text" placeholder="Player Name" class="border-2 border-black rounded-md p-1 m-1 w-60 h-10" />
             </div>
 
             <div>             <!-- race select has to call in races from api and populate the options--->
@@ -148,8 +148,8 @@ async function onLevelUpClick() {
 
             <div>              <!-- alignment select has to call in alignments from api and populate the options--->
               <p>Alignment</p>
-              <select class="border-2 border-black rounded-md p-1 m-1 w-60 h-10">
-                  <option value="" disabled selected>Select Alignment</option>
+              <select v-model="alignment" class="border-2 border-black rounded-md p-1 m-1 w-60 h-10">
+                  <option value="" disabled>Select Alignment</option>
                   <option v-for="alignment in alignments" :key="alignment.index" :value="alignment.index">
                     {{ alignment.name }}
                   </option>
