@@ -7,6 +7,8 @@ import { selectRace } from '../modules/useSelectedRace.js'
 import { selectBackground } from '../modules/useSelectedBackground.js'
 import { level, experience } from '../modules/useLevelState.js'
 import { setLevel, levelUp, canLevelUp, nextLevelXp, onClassChosen } from '../modules/useLevel.js'
+import { loadClassSpells } from '../modules/useSpells.js'
+import { characterName } from '../modules/useCharacterInfo.js'
 
 const classes = ref([])
 const races = ref([])
@@ -39,6 +41,7 @@ onMounted(async () => {
 async function onClassChange(event) {
   try {
     await selectClass(event.target.value) // class popup: skills + gear
+    await loadClassSpells() // the spells this class can learn, for the spell page
     await onClassChosen() // level popup: fighting style etc. for every level you already are
   } catch (err) {
     error.value = err.message
@@ -96,7 +99,7 @@ async function onLevelUpClick() {
       <div class="flex justify-center items-center">
           <div>
             <p>Character Name</p>
-            <input type="text" placeholder="Name" class="border-2 border-black rounded-md p-1 m-1 h-10" /> <!-- name input --->
+            <input type="text" v-model="characterName" placeholder="Name" class="border-2 border-black rounded-md p-1 m-1 h-10" /> <!-- name input --->
           </div>
           <div class="grid grid-cols-3 grid-rows-2 justify-center items-center">
 

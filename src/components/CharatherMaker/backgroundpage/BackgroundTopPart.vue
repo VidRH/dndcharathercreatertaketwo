@@ -1,10 +1,12 @@
-<script steup ></script>
+<script setup>
+import { characterName } from '../../modules/useCharacterInfo.js'
+</script>
 
 <template>
   <div class="flex  gap-2.5 justify-center items-center">
     <div>
       <p>Character Name</p>
-      <input type="text" placeholder=" Charather Name" class="border-2 border-black rounded-md p-1 m-1 h-10" /> <!-- name input --->
+      <input type="text" v-model="characterName" placeholder=" Charather Name" class="border-2 border-black rounded-md p-1 m-1 h-10" /> <!-- name input --->
     </div>
     <div class="">
       <div class="flex">

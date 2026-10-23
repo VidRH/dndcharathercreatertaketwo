@@ -30,6 +30,12 @@ export const fetchEquipmentCategory = (index) => fetchDetails('equipment-categor
 export const fetchFeature = (index) => fetchDetails('features', index)
 export const fetchTrait = (index) => fetchDetails('traits', index)
 
+// Every spell a class can learn, e.g. [{ index: 'fire-bolt', name: 'Fire Bolt', level: 0 }, ...]
+export async function fetchClassSpells(classIndex) {
+  const data = await fetchDetails('classes', `${classIndex}/spells`)
+  return data.results
+}
+
 // All 20 levels of a class, e.g. what a fighter gets at level 1, 2, 3...
 // (The API doesn't always send them in order, so we sort them.)
 export async function fetchClassLevels(classIndex) {
