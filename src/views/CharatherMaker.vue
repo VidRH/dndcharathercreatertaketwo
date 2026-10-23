@@ -81,7 +81,7 @@ async function onSave() {
 <template>
   <main>
     <!-- tab buttons to switch page -->
-    <nav class="flex justify-center gap-2.5 my-4">
+    <nav class="sm:flex sm:justify-center max-sm:grid max-sm:grid-cols-2   gap-2.5 my-4">
       <button
         v-for="page in pages"
         :key="page.id"
@@ -112,10 +112,10 @@ async function onSave() {
     -->
     <div v-show="currentPage === 'sheet'">
       <CharatherMakerTopPart class="w-80% my-7" /> <!--includes: name, class, race, level , xp ,background, alignment -->
-      <div class="flex flex-rows justify-between flex-nonwrap  w-80%"> <!--grid for the left, middle and right parts-->
-        <CharatherMakerLeftPart class="w-1/3 col-span-1 col-start-1 "/> <!-- includes: attributes, saving throws, profeciency bonus, inspiration, skills,  passive preception, other proficiencies -->
-        <CharatherMakerMiddlePart class="w-1/3 col-span-1 col-start-2 "/> <!--includes: armor class, initiative, speed, hit points and hit dice, temporary hitpoints, death saves, attacks spellcasting,equipment, money-->
-        <CharatherMakerRightPart class="w-1/3 col-span-1 col-start-3  "/> <!--personality traits, ideal, bond, flaw, features & traits-->
+      <div class="xl:flex xl:flex-rows grid sm:grid-cols-2 grid-cols-1 justify-between flex-nonwrap  w-80%"> <!--grid for the left, middle and right parts-->
+        <CharatherMakerLeftPart class="xl:w-1/3  col-span-1  "/> <!-- includes: attributes, saving throws, profeciency bonus, inspiration, skills,  passive preception, other proficiencies -->
+        <CharatherMakerMiddlePart class="xl:w-1/3  col-span-1 "/> <!--includes: armor class, initiative, speed, hit points and hit dice, temporary hitpoints, death saves, attacks spellcasting,equipment, money-->
+        <CharatherMakerRightPart class="xl:w-1/3  col-span-1  "/> <!--personality traits, ideal, bond, flaw, features & traits-->
       </div>
     </div>
 

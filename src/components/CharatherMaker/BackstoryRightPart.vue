@@ -12,7 +12,7 @@ const featuresAndTraits = computed(() =>
 </script>
 
 <template>
-  <main class="w-1/3 ">
+  <main>
     <div class="w-full">
       <div class=" w-full flex flex-col  h-50">
           <textarea v-model="personalityTraits" id="personalityTraits" class="border-2 border-black rounded-md mt-2 h-full"></textarea>

@@ -111,81 +111,79 @@ async function onLevelUpClick() {
 
 
 <template>
-  <Main>
-    <div> <!-- top part of the charather maker includes: name, class, race,  , xp ,background, alignment --->
-      <div class="flex justify-center items-center">
-          <div>
-            <p>Character Name</p>
-            <input type="text" v-model="characterName" placeholder="Name" class="border-2 border-black rounded-md p-1 m-1 h-10" /> <!-- name input --->
-          </div>
-          <div class="grid grid-cols-3 grid-rows-2 justify-center items-center">
+  <main >
+      <div class="lg:flex justify-center items-center"><!-- top part of the charather maker includes: name, class, race,  , xp ,background, alignment --->
+        <div class>
+          <p>Character Name</p>
+          <input type="text" v-model="characterName" placeholder="Name" class="border-2 border-black rounded-md p-1 m-1 h-10" /> <!-- name input --->
+        </div>
+        <div class="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 justify-center items-center ">
 
 
-            <div class="flex justify-center items-center"> <!-- class select has to call in classes from api and populate the options plus lvl for good measure-->
-              <div>
-                <P>Class</P>    <!-- class select has to call in classes from api and populate the options--->
-                <select v-model="classIndex" class="border-2 border-black rounded-md p-1 m-1 w-48 h-10">
-                  <option value="" disabled>Select Class</option>
-                  <option v-for="cls in classes" :key="cls.index" :value="cls.index">
-                    {{ cls.name }}
-                  </option>
-                </select>
-              </div>
-              <div>              <!-- level input -->
-                <P>lvl</P>
-                <input type="number" min="1" max="20" :value="level" @change="onLevelChange" class="border-2 border-black rounded-md p-1 m-1 w-14 h-10" /> <!-- level input --->
-              </div>
-            </div>
-
-            <div>             <!-- background select has to call in backgrounds from api and populate the options--->
-              <P>Background</P>
-              <select v-model="backgroundIndex" class="border-2 border-black rounded-md p-1 m-1 w-60 h-10">
-                <option value="" disabled>Select Background</option>
-                <option v-for="background in backgrounds" :key="background.index" :value="background.index">
-                  {{ background.name }}
+          <div class="flex items-center"> <!-- class select has to call in classes from api and populate the options plus lvl for good measure-->
+            <div>
+              <p>Class</p>    <!-- class select has to call in classes from api and populate the options--->
+              <select v-model="classIndex" class="border-2 border-black rounded-md p-1 m-1 w-48 h-10">
+                <option value="" disabled>Select Class</option>
+                <option v-for="cls in classes" :key="cls.index" :value="cls.index">
+                  {{ cls.name }}
                 </option>
               </select>
             </div>
+            <div>              <!-- level input -->
+              <P>lvl</P>
+              <input type="number" min="1" max="20" :value="level" @change="onLevelChange" class="border-2 border-black rounded-md p-1 m-1 w-14 h-10" /> <!-- level input --->
+             </div>
+           </div>
 
-
-            <div>             <!-- player name input, or player account name will be put here -->
-              <p>Player Name</p>
-              <input v-model="playerName" type="text" placeholder="Player Name" class="border-2 border-black rounded-md p-1 m-1 w-60 h-10" />
-            </div>
-
-            <div>             <!-- race select has to call in races from api and populate the options--->
-              <p>Race</p>
-              <select v-model="raceIndex" class="border-2 border-black rounded-md p-1 m-1 w-60 h-10">
-                <option value="" disabled>Select Race</option>
-                <option v-for="race in races" :key="race.index" :value="race.index">
-                  {{ race.name }}
-                </option>
-              </select>
-            </div>
-
-            <div>              <!-- alignment select has to call in alignments from api and populate the options--->
-              <p>Alignment</p>
-              <select v-model="alignment" class="border-2 border-black rounded-md p-1 m-1 w-60 h-10">
-                  <option value="" disabled>Select Alignment</option>
-                  <option v-for="alignment in alignments" :key="alignment.index" :value="alignment.index">
-                    {{ alignment.name }}
-                  </option>
+          <div>             <!-- background select has to call in backgrounds from api and populate the options--->
+            <p>Background</p>
+            <select v-model="backgroundIndex" class="border-2 border-black rounded-md p-1 m-1 w-60 h-10">
+              <option value="" disabled>Select Background</option>
+              <option v-for="background in backgrounds" :key="background.index" :value="background.index">
+                {{ background.name }}
+              </option>
             </select>
-            </div>
-
-            <div>              <!-- xp input -->
-              <p>Experience Points</p>
-              <div class="flex items-center">
-                <input type="number" min="0" v-model.number="experience" placeholder="xp" class="border-2 border-black rounded-md p-1 m-1 w-40 h-10" />
-                <!-- only shows when you have enough XP for the next level -->
-                <button v-if="canLevelUp" @click="onLevelUpClick" class="border-2 border-black rounded-md px-2 h-10 bg-black text-white">⬆ Level up!</button>
-              </div>
-              <p v-if="nextLevelXp !== null" class="text-xs text-gray-500">next level at {{ nextLevelXp }} XP</p>
-            </div>
           </div>
+
+
+          <div>             <!-- player name input, or player account name will be put here -->
+            <p>Player Name</p>
+            <input v-model="playerName" type="text" placeholder="Player Name" class="border-2 border-black rounded-md p-1 m-1 w-60 h-10" />
+          </div>
+
+          <div>             <!-- race select has to call in races from api and populate the options--->
+            <p>Race</p>
+            <select v-model="raceIndex" class="border-2 border-black rounded-md p-1 m-1 w-60 h-10">
+              <option value="" disabled>Select Race</option>
+              <option v-for="race in races" :key="race.index" :value="race.index">
+                {{ race.name }}
+              </option>
+            </select>
+          </div>
+
+          <div>              <!-- alignment select has to call in alignments from api and populate the options--->
+            <p>Alignment</p>
+            <select v-model="alignment" class="border-2 border-black rounded-md p-1 m-1 w-60 h-10">
+                <option value="" disabled>Select Alignment</option>
+                <option v-for="alignment in alignments" :key="alignment.index" :value="alignment.index">
+                  {{ alignment.name }}
+                </option>
+            </select>
+          </div>
+
+          <div>              <!-- xp input -->
+            <p>Experience Points</p>
+            <div class="flex items-center">
+              <input type="number" min="0" v-model.number="experience" placeholder="xp" class="border-2 border-black rounded-md p-1 m-1 w-40 h-10" />
+              <!-- only shows when you have enough XP for the next level -->
+              <button v-if="canLevelUp" @click="onLevelUpClick" class="border-2 border-black rounded-md px-2 h-10 bg-black text-white">⬆ Level up!</button>
+            </div>
+            <p v-if="nextLevelXp !== null" class="text-xs text-gray-500">next level at {{ nextLevelXp }} XP</p>
+          </div>
+        </div>
       </div>
-    </div>
-  </Main>
+  </main>
 </template>
 
 

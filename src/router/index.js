@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LogIn from '../views/LogIn.vue'
+import SignUp from '../views/SignUp.vue'
 import CharatherMaker from '../views/CharatherMaker.vue'
 import MyCharacters from '../views/MyCharacters.vue'
 import { authReady } from '../components/modules/useAuth.js'
@@ -18,6 +19,13 @@ const router = createRouter({
       path: '/LogIn',
       name: 'LogIn',
       component: LogIn,
+      meta: { guestOnly: true },
+    },
+    {
+      path: '/SignUp',
+      name: 'SignUp',
+      component: SignUp,
+      meta: { guestOnly: true },
     },
     {
       path: '/MyCharacters',
@@ -55,8 +63,8 @@ router.beforeEach(async (to) => {
     return '/LogIn'
   }
 
-  // Already logged in -> no reason to see the login page
-  if (to.name === 'LogIn' && user) {
+  // Already logged in -> no reason to see the log in or sign up page
+  if (to.meta.guestOnly && user) {
     return '/MyCharacters'
   }
 })
