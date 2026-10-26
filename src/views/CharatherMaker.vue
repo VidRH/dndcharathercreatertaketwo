@@ -81,12 +81,12 @@ async function onSave() {
 <template>
   <main>
     <!-- tab buttons to switch page -->
-    <nav class="sm:flex sm:justify-center max-sm:grid max-sm:grid-cols-2   gap-2.5 my-4">
+    <nav class="sm:flex sm:justify-center max-sm:grid max-sm:grid-cols-2 gap-2.5 my-4">
       <button
         v-for="page in pages"
         :key="page.id"
         @click="currentPage = page.id"
-        class="border-2 border-black rounded-md px-4 py-1 text-lg cursor-pointer"
+        class="border-2 border-black rounded-md px-4 py-1 hover:bg-paperdarker text-lg cursor-pointer"
         :class="currentPage === page.id ? 'bg-paperdarker font-bold' : 'opacity-60'"
       >
         {{ page.label }}
@@ -96,7 +96,7 @@ async function onSave() {
         @click="onSave"
         :disabled="saveStatus === 'saving' || loadStatus !== ''"
         title="Can't save while the character is loading (or didn't load), or it would overwrite the saved one"
-        class="border-2 border-black rounded-md px-4 py-1 text-lg cursor-pointer bg-black text-white disabled:opacity-50"
+        class="border-2 border-black rounded-md px-4 py-1 text-lg cursor-pointer bg-green hover:bg-greendarker text-black disabled:opacity-50"
       >
         {{ saveStatus === 'saving' ? 'Saving...' : 'Save' }}
       </button>

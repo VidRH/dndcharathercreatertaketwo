@@ -4,6 +4,7 @@ import LogIn from '../views/LogIn.vue'
 import SignUp from '../views/SignUp.vue'
 import CharatherMaker from '../views/CharatherMaker.vue'
 import MyCharacters from '../views/MyCharacters.vue'
+import DungeonMaster from '../views/DungeonMaster.vue'
 import { authReady } from '../components/modules/useAuth.js'
 import { auth } from '../firebase.js'
 
@@ -33,6 +34,13 @@ const router = createRouter({
       component: MyCharacters,
       meta: { requiresAuth: true },
     },
+    {
+      path: '/DungeonMaster',
+      name: 'DungeonMaster',
+      component: DungeonMaster,
+      meta: { requiresAuth: true },
+    },
+
     {
       // The ? makes the id optional:
       //   /CharatherMaker         -> a brand new character

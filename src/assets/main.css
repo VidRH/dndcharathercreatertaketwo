@@ -3,8 +3,16 @@
 @theme {
   --color-paperlighter: #F7F3E6;
   --color-paperdarker: #ebe2c2;
+
   --color-blue: #33D6FF;
   --color-dark: #393D3F;
+
+
+  --color-green: #C1E1C1;
+  --color-greendarker: #A3D9A5;
+
+  --color-red: #FF746C;
+  --color-reddarker: #FF5C5C;
 };
 
 @font-face {
