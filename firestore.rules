@@ -1,0 +1,42 @@
+rules_version = '2';
+
+// Who may read and write what in Firestore.
+// The page hiding a button is not enough: these rules are what really stops people.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // Profiles: users/{uid}
+    match /users/{uid} {
+      // Everyone logged in can see names and pictures (needed for campaign member lists later)
+      allow read: if signedIn();
+
+      // You make your own profile, and you can't sign yourself up as an admin
+      allow create: if request.auth.uid == uid
+        && request.resource.data.role in ['player', 'dm'];
+
+      // You can edit your own profile and switch between player and dm,
+      // but never make yourself an admin. Admins can edit anyone.
+      allow update: if (request.auth.uid == uid
+          && (request.resource.data.role == resource.data.role
+            || (resource.data.role in ['player', 'dm'] && request.resource.data.role in ['player', 'dm'])))
+        || isAdmin();
+
+      // Deleting a whole account goes through a Cloud Function later (it ignores these rules)
+      allow delete: if isAdmin();
+
+      // Your saved characters: only you (and admins)
+      match /characters/{characterId} {
+        allow read, write: if request.auth.uid == uid || isAdmin();
+      }
+    }
+  }
+}

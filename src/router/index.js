@@ -6,6 +6,7 @@ import CharatherMaker from '../views/CharatherMaker.vue'
 import MyCharacters from '../views/MyCharacters.vue'
 import DungeonMaster from '../views/DungeonMaster.vue'
 import { authReady } from '../components/modules/useAuth.js'
+import { loadProfile, hasRole } from '../components/modules/useProfile.js'
 import { auth } from '../firebase.js'
 
 const router = createRouter({
@@ -38,7 +39,8 @@ const router = createRouter({
       path: '/DungeonMaster',
       name: 'DungeonMaster',
       component: DungeonMaster,
-      meta: { requiresAuth: true },
+      // roles = which kinds of account may open this page (admins always may)
+      meta: { requiresAuth: true, roles: ['dm'] },
     },
 
     {
@@ -74,6 +76,18 @@ router.beforeEach(async (to) => {
   // Already logged in -> no reason to see the log in or sign up page
   if (to.meta.guestOnly && user) {
     return '/MyCharacters'
+  }
+
+  // Page is only for some kinds of account -> wait for the profile to know what this user is
+  if (to.meta.roles) {
+    try {
+      await loadProfile(user)
+    } catch (e) {
+      console.error('Could not load your profile:', e)
+    }
+    if (!hasRole(to.meta.roles)) {
+      return '/MyCharacters'
+    }
   }
 })
 
