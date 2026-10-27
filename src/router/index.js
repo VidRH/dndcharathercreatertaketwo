@@ -5,6 +5,7 @@ import SignUp from '../views/SignUp.vue'
 import CharatherMaker from '../views/CharatherMaker.vue'
 import MyCharacters from '../views/MyCharacters.vue'
 import DungeonMaster from '../views/DungeonMaster.vue'
+import MyAccount from '../views/MyAccount.vue'
 import { authReady } from '../components/modules/useAuth.js'
 import { loadProfile, hasRole } from '../components/modules/useProfile.js'
 import { auth } from '../firebase.js'
@@ -41,6 +42,12 @@ const router = createRouter({
       component: DungeonMaster,
       // roles = which kinds of account may open this page (admins always may)
       meta: { requiresAuth: true, roles: ['dm'] },
+    },
+    {
+      path: '/MyAccount',
+      name: 'MyAccount',
+      component: MyAccount,
+      meta: { requiresAuth: true },
     },
 
     {

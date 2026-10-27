@@ -41,3 +41,5 @@ __screenshots__/
 
 # Firebase config (keep it off GitHub)
 src/firebase.js
+storage.rules
+firestore.rules

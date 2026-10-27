@@ -1,5 +1,11 @@
 import { ref } from 'vue'
-import { onAuthStateChanged, signOut } from 'firebase/auth'
+import {
+  onAuthStateChanged,
+  signOut,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  updatePassword,
+} from 'firebase/auth'
 import { auth } from '@/firebase'
 import { loadProfile, clearProfile } from './useProfile.js'
 
@@ -36,4 +42,11 @@ onAuthStateChanged(auth, async (user) => {
 
 export async function logOut() {
   await signOut(auth)
+}
+
+export async function changePassword(currentPassword, newPassword) {
+  const user = auth.currentUser
+  // Firebase wants proof it's really you before a password change: log in again with the old one
+  await reauthenticateWithCredential(user, EmailAuthProvider.credential(user.email, currentPassword))
+  await updatePassword(user, newPassword)
 }

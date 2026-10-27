@@ -2,6 +2,7 @@
 import { RouterLink, RouterView, useRouter } from 'vue-router'
 import { currentUser, logOut } from '@/components/modules/useAuth.js'
 import { currentProfile, isDM } from '@/components/modules/useProfile.js'
+import ProfilePicture from '@/components/Account/ProfilePicture.vue'
 
 const router = useRouter()
 
@@ -25,7 +26,10 @@ async function handleLogOut() {
         </div>
         <div v-else class="ml-auto flex items-center gap-5">
           <!-- the email shows until the profile has loaded -->
-          <span class="normal-case text-base">{{ currentProfile?.displayName || currentUser.email }}</span>
+          <RouterLink to="/MyAccount" class="flex items-center gap-2 normal-case text-base hover:text-blue">
+            <ProfilePicture :url="currentProfile?.photoURL" :name="currentProfile?.displayName || currentUser.email" size="w-8 h-8 text-sm" />
+            {{ currentProfile?.displayName || currentUser.email }}
+          </RouterLink>
           <button @click="handleLogOut" class="uppercase hover:text-blue cursor-pointer">Log Out</button>
         </div>
       </nav>

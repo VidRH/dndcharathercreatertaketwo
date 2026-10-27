@@ -1,9 +1,11 @@
 import { ref, computed } from 'vue'
-import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore'
-import { db, auth } from '@/firebase'
+import { doc, getDoc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore'
+// "ref" is already Vue's ref, so Storage's one gets another name
+import { ref as storageRef, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage'
+import { db, auth, storage } from '@/firebase'
 
 // The logged in user's profile from Firestore: users/{uid}
-// { uid, displayName, description, photoURL, email, role, createdAt }
+// { uid, displayName, description, photoURL, photoPath, email, role, createdAt }
 // role is 'player', 'dm' or 'admin'. Like currentUser it lives outside of any component,
 // so every component that imports it sees the same profile.
 export const currentProfile = ref(null)
@@ -73,4 +75,52 @@ async function fetchOrCreateProfile(user) {
     currentProfile.value = { uid: user.uid, ...profile }
   }
   return currentProfile.value
+}
+
+// Saves changes to your own profile, e.g. { displayName, description, role }
+export async function updateMyProfile(changes) {
+  await updateDoc(doc(db, 'users', auth.currentUser.uid), changes)
+  // Change our copy too, so the nav bar and pages update without fetching again
+  currentProfile.value = { ...currentProfile.value, ...changes }
+}
+
+export const MAX_PICTURE_SIZE = 2 * 1024 * 1024 // 2 MB, storage.rules checks the same
+
+// What's wrong with a picture someone picked, or '' if it's fine
+export function pictureProblem(file) {
+  if (!file.type.startsWith('image/')) return 'That file is not an image.'
+  if (file.size > MAX_PICTURE_SIZE) return 'The picture must be smaller than 2 MB.'
+  return ''
+}
+
+// Uploads a new profile picture to Storage and puts its link in the profile
+export async function uploadProfilePicture(file) {
+  const problem = pictureProblem(file)
+  if (problem) throw new Error(problem)
+
+  const oldPath = currentProfile.value?.photoPath
+  // A new file name every time, otherwise browsers keep showing the old picture they remember
+  const path = `avatars/${auth.currentUser.uid}/${Date.now()}`
+  const fileRef = storageRef(storage, path)
+
+  await uploadBytes(fileRef, file, { contentType: file.type })
+  const photoURL = await getDownloadURL(fileRef)
+  await updateMyProfile({ photoURL, photoPath: path })
+
+  if (oldPath) await deletePictureFile(oldPath)
+}
+
+export async function removeProfilePicture() {
+  const oldPath = currentProfile.value?.photoPath
+  await updateMyProfile({ photoURL: '', photoPath: '' })
+  if (oldPath) await deletePictureFile(oldPath)
+}
+
+// The old file is just clutter at this point, so if deleting it fails we don't bother the user
+async function deletePictureFile(path) {
+  try {
+    await deleteObject(storageRef(storage, path))
+  } catch (e) {
+    console.warn('Could not delete the old picture:', e)
+  }
 }
