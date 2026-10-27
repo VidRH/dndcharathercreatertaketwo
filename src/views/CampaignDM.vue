@@ -3,6 +3,7 @@ import { ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import { getCampaign } from '@/components/modules/useCampaigns.js'
 import CampaignOverview from '@/components/DungeonMaster/CampaignOverview.vue'
+import CampaignCharacters from '@/components/DungeonMaster/CampaignCharacters.vue'
 
 // The DM's page for one campaign: /DungeonMaster/:campaignId
 const route = useRoute()
@@ -11,14 +12,27 @@ const campaign = ref(null)
 const loading = ref(true)
 const error = ref(null)
 
-// One tab for now: Characters, Encounters, Players and Invite get added here in the next phases
-const tabs = [{ id: 'overview', label: 'Overview' }]
+// Encounters, Players and Invite get added here in the next phases
+const tabs = [
+  { id: 'overview', label: 'Overview' },
+  { id: 'characters', label: 'Characters' },
+]
 const activeTab = ref('overview')
+
+// A tab is only made the first time you open it, and after that it's just hidden when you
+// switch away (v-show). That way half-typed work in one tab is still there when you come back.
+const openedTabs = ref(new Set(['overview']))
+function openTab(tabId) {
+  activeTab.value = tabId
+  openedTabs.value.add(tabId)
+}
 
 async function load(campaignId) {
   loading.value = true
   error.value = null
   campaign.value = null
+  activeTab.value = 'overview'
+  openedTabs.value = new Set(['overview'])
   try {
     campaign.value = await getCampaign(campaignId)
   } catch (err) {
@@ -52,7 +66,7 @@ function onSaved(fields) {
         <button
           v-for="tab in tabs"
           :key="tab.id"
-          @click="activeTab = tab.id"
+          @click="openTab(tab.id)"
           :class="[
             'px-4 py-1 rounded-t-md border-2 border-b-0 border-black cursor-pointer whitespace-nowrap',
             activeTab === tab.id ? 'bg-black text-white' : '',
@@ -62,7 +76,8 @@ function onSaved(fields) {
         </button>
       </nav>
 
-      <CampaignOverview v-if="activeTab === 'overview'" :campaign="campaign" @saved="onSaved" />
+      <CampaignOverview v-show="activeTab === 'overview'" :campaign="campaign" @saved="onSaved" />
+      <CampaignCharacters v-if="openedTabs.has('characters')" v-show="activeTab === 'characters'" :campaign-id="campaign.id" />
     </template>
   </main>
 </template>

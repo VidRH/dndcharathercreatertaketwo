@@ -101,19 +101,19 @@ async function onDelete() {
 
       <label class="flex flex-col gap-1">
         Short description
-        <span class="text-xs text-gray-500">One or two sentences, shown on the campaign card.</span>
+        <span class="text-md text-gray-500">One or two sentences, shown on the campaign card.</span>
         <textarea v-model="form.shortDescription" rows="2" maxlength="200" class="border p-2"></textarea>
       </label>
 
       <label class="flex flex-col gap-1">
         Long description
-        <span class="text-xs text-gray-500">The setting, the story so far... Players will be able to read this.</span>
+        <span class="text-md text-gray-500">The setting, the story so far... Players will be able to read this.</span>
         <textarea v-model="form.longDescription" rows="8" class="border p-2"></textarea>
       </label>
 
       <label class="flex flex-col gap-1">
         DM notes
-        <span class="text-xs text-gray-500">Only you can ever see these.</span>
+        <span class="text-md text-gray-500">Only you can ever see these.</span>
         <textarea v-model="form.notes" rows="8" class="border p-2 bg-paperdarker"></textarea>
       </label>
 

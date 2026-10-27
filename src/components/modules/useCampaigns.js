@@ -11,6 +11,7 @@ import {
   serverTimestamp,
 } from 'firebase/firestore'
 import { db, auth } from '@/firebase'
+import { deleteAllCampaignCharacters } from './useCampaignCharacters.js'
 
 // Talking to Firestore about campaigns: making, listing, loading, saving and deleting them.
 //
@@ -88,9 +89,11 @@ export async function saveCampaign(campaignId, { name, shortDescription, longDes
   await batch.commit()
 }
 
-// For now a campaign is just these two documents. Once it has characters, encounters
-// and members inside it, deleting moves to a Cloud Function that removes everything at once.
+// Firestore doesn't delete what's inside a document along with it, so everything inside goes first.
+// Once campaigns also have encounters and members, deleting moves to a Cloud Function
+// that removes everything at once.
 export async function deleteCampaign(campaignId) {
+  await deleteAllCampaignCharacters(campaignId)
   await deleteDoc(notesDoc(campaignId))
   await deleteDoc(doc(campaignsFolder(), campaignId))
 }
