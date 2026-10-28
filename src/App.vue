@@ -19,6 +19,7 @@ async function handleLogOut() {
       <nav class="bg-dark text-white gap-x-5 gap-y-1 flex flex-wrap min-h-12.5 items-center px-5 py-2 uppercase weight-bold text-xl">
         <RouterLink to="/" class="hover:text-blue ">Home</RouterLink>
         <RouterLink v-if="currentUser" to="/MyCharacters" class="hover:text-blue ">My Characters</RouterLink>
+        <RouterLink v-if="currentUser" to="/Campaigns" class="hover:text-blue ">Campaigns</RouterLink>
         <router-link v-if="currentUser && isDM" to="/DungeonMaster" class="hover:text-blue ">Dungeon Master</router-link>
         <div v-if="!currentUser" class="ml-auto flex items-center gap-5">
           <RouterLink to="/LogIn" class="hover:text-blue ">Log In</RouterLink>

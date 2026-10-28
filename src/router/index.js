@@ -7,6 +7,8 @@ import MyCharacters from '../views/MyCharacters.vue'
 import DungeonMaster from '../views/DungeonMaster.vue'
 import CampaignDM from '../views/CampaignDM.vue'
 import EncounterDM from '../views/EncounterDM.vue'
+import PlayerDM from '../views/PlayerDM.vue'
+import PlayerCampaigns from '../views/PlayerCampaigns.vue'
 import MyAccount from '../views/MyAccount.vue'
 import { authReady } from '../components/modules/useAuth.js'
 import { loadProfile, hasRole } from '../components/modules/useProfile.js'
@@ -58,6 +60,20 @@ const router = createRouter({
       name: 'EncounterDM',
       component: EncounterDM,
       meta: { requiresAuth: true, roles: ['dm'] },
+    },
+    {
+      // One player who joined a campaign, e.g. /DungeonMaster/abc123/player/user456
+      path: '/DungeonMaster/:campaignId/player/:uid',
+      name: 'PlayerDM',
+      component: PlayerDM,
+      meta: { requiresAuth: true, roles: ['dm'] },
+    },
+    {
+      // Joining campaigns and the ones you're in: every logged in account
+      path: '/Campaigns',
+      name: 'Campaigns',
+      component: PlayerCampaigns,
+      meta: { requiresAuth: true },
     },
     {
       path: '/MyAccount',

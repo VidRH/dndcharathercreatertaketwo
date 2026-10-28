@@ -12,6 +12,7 @@ import {
 } from 'firebase/firestore'
 import { db, auth } from '@/firebase'
 import { getCharacterData, loadCharacterData } from './useCharacterData.js'
+import { syncCharacterToCampaigns } from './useCampaignMembers.js'
 
 // Talking to Firestore: saving, loading, listing and deleting characters.
 
@@ -29,6 +30,9 @@ export async function saveCharacter(id) {
 
   if (id) {
     await updateDoc(doc(charactersFolder(), id), data)
+    // Campaigns this character plays in get the new version for their DM.
+    // Not awaited: the save itself is done, this can finish in the background.
+    syncCharacterToCampaigns(id).catch((err) => console.warn('Could not update the campaigns:', err))
     return id
   }
 

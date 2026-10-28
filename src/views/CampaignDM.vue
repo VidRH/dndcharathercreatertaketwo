@@ -5,6 +5,8 @@ import { getCampaign } from '@/components/modules/useCampaigns.js'
 import CampaignOverview from '@/components/DungeonMaster/CampaignOverview.vue'
 import CampaignCharacters from '@/components/DungeonMaster/CampaignCharacters.vue'
 import CampaignEncounters from '@/components/DungeonMaster/CampaignEncounters.vue'
+import CampaignPlayers from '@/components/DungeonMaster/CampaignPlayers.vue'
+import CampaignInvite from '@/components/DungeonMaster/CampaignInvite.vue'
 
 // The DM's page for one campaign: /DungeonMaster/:campaignId
 const route = useRoute()
@@ -13,11 +15,12 @@ const campaign = ref(null)
 const loading = ref(true)
 const error = ref(null)
 
-// Players and Invite get added here in the next phases
 const tabs = [
   { id: 'overview', label: 'Overview' },
   { id: 'characters', label: 'Characters' },
   { id: 'encounters', label: 'Encounters' },
+  { id: 'players', label: 'Players' },
+  { id: 'invite', label: 'Invite' },
 ]
 const activeTab = ref('overview')
 
@@ -83,6 +86,8 @@ function onSaved(fields) {
       <CampaignOverview v-show="activeTab === 'overview'" :campaign="campaign" @saved="onSaved" />
       <CampaignCharacters v-if="openedTabs.has('characters')" v-show="activeTab === 'characters'" :campaign-id="campaign.id" />
       <CampaignEncounters v-if="openedTabs.has('encounters')" v-show="activeTab === 'encounters'" :campaign-id="campaign.id" />
+      <CampaignPlayers v-if="openedTabs.has('players')" v-show="activeTab === 'players'" :campaign-id="campaign.id" />
+      <CampaignInvite v-if="openedTabs.has('invite')" v-show="activeTab === 'invite'" :campaign="campaign" @changed="(code) => (campaign.inviteCode = code)" />
     </template>
   </main>
 </template>

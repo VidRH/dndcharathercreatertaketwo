@@ -64,13 +64,13 @@ const difficultyColors = {
     </div>
 
     <!-- the party's thresholds, so you can see how close the next step is -->
-    <p class="text-sm">
+    <p class="text-lg">
       Party thresholds:
       <span v-for="(difficulty, i) in DIFFICULTIES" :key="difficulty">
         {{ difficulty }} {{ result.thresholds[difficulty].toLocaleString() }}<template v-if="i < DIFFICULTIES.length - 1">, </template>
       </span>
     </p>
-    <p class="text-xs text-gray-500">
+    <p class="text-md text-gray-500">
       Adjusted XP = total XP &times; a multiplier for the number of monsters (Dungeon Master's Guide).
       It's only used for the difficulty; players share the total XP.
     </p>
