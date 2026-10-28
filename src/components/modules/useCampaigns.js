@@ -12,6 +12,7 @@ import {
 } from 'firebase/firestore'
 import { db, auth } from '@/firebase'
 import { deleteAllCampaignCharacters } from './useCampaignCharacters.js'
+import { deleteAllEncounters } from './useEncounters.js'
 
 // Talking to Firestore about campaigns: making, listing, loading, saving and deleting them.
 //
@@ -94,6 +95,7 @@ export async function saveCampaign(campaignId, { name, shortDescription, longDes
 // that removes everything at once.
 export async function deleteCampaign(campaignId) {
   await deleteAllCampaignCharacters(campaignId)
+  await deleteAllEncounters(campaignId)
   await deleteDoc(notesDoc(campaignId))
   await deleteDoc(doc(campaignsFolder(), campaignId))
 }

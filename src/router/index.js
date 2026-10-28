@@ -6,6 +6,7 @@ import CharatherMaker from '../views/CharatherMaker.vue'
 import MyCharacters from '../views/MyCharacters.vue'
 import DungeonMaster from '../views/DungeonMaster.vue'
 import CampaignDM from '../views/CampaignDM.vue'
+import EncounterDM from '../views/EncounterDM.vue'
 import MyAccount from '../views/MyAccount.vue'
 import { authReady } from '../components/modules/useAuth.js'
 import { loadProfile, hasRole } from '../components/modules/useProfile.js'
@@ -49,6 +50,13 @@ const router = createRouter({
       path: '/DungeonMaster/:campaignId',
       name: 'CampaignDM',
       component: CampaignDM,
+      meta: { requiresAuth: true, roles: ['dm'] },
+    },
+    {
+      // One encounter of a campaign, e.g. /DungeonMaster/abc123/encounter/xyz789
+      path: '/DungeonMaster/:campaignId/encounter/:encounterId',
+      name: 'EncounterDM',
+      component: EncounterDM,
       meta: { requiresAuth: true, roles: ['dm'] },
     },
     {

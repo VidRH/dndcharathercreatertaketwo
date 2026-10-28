@@ -4,6 +4,7 @@ import { RouterLink, useRoute } from 'vue-router'
 import { getCampaign } from '@/components/modules/useCampaigns.js'
 import CampaignOverview from '@/components/DungeonMaster/CampaignOverview.vue'
 import CampaignCharacters from '@/components/DungeonMaster/CampaignCharacters.vue'
+import CampaignEncounters from '@/components/DungeonMaster/CampaignEncounters.vue'
 
 // The DM's page for one campaign: /DungeonMaster/:campaignId
 const route = useRoute()
@@ -12,10 +13,11 @@ const campaign = ref(null)
 const loading = ref(true)
 const error = ref(null)
 
-// Encounters, Players and Invite get added here in the next phases
+// Players and Invite get added here in the next phases
 const tabs = [
   { id: 'overview', label: 'Overview' },
   { id: 'characters', label: 'Characters' },
+  { id: 'encounters', label: 'Encounters' },
 ]
 const activeTab = ref('overview')
 
@@ -31,8 +33,10 @@ async function load(campaignId) {
   loading.value = true
   error.value = null
   campaign.value = null
-  activeTab.value = 'overview'
-  openedTabs.value = new Set(['overview'])
+  // ?tab=encounters in the link opens that tab, e.g. coming back from an encounter
+  const startTab = tabs.some((tab) => tab.id === route.query.tab) ? route.query.tab : 'overview'
+  activeTab.value = startTab
+  openedTabs.value = new Set(['overview', startTab])
   try {
     campaign.value = await getCampaign(campaignId)
   } catch (err) {
@@ -78,6 +82,7 @@ function onSaved(fields) {
 
       <CampaignOverview v-show="activeTab === 'overview'" :campaign="campaign" @saved="onSaved" />
       <CampaignCharacters v-if="openedTabs.has('characters')" v-show="activeTab === 'characters'" :campaign-id="campaign.id" />
+      <CampaignEncounters v-if="openedTabs.has('encounters')" v-show="activeTab === 'encounters'" :campaign-id="campaign.id" />
     </template>
   </main>
 </template>
