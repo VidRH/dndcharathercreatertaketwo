@@ -11,6 +11,7 @@ import PlayerDM from '../views/PlayerDM.vue'
 import PlayerCampaigns from '../views/PlayerCampaigns.vue'
 import CampaignPlayer from '../views/CampaignPlayer.vue'
 import EncounterPlayer from '../views/EncounterPlayer.vue'
+import AdminView from '../views/AdminView.vue'
 import MyAccount from '../views/MyAccount.vue'
 import { authReady } from '../components/modules/useAuth.js'
 import { loadProfile, hasRole } from '../components/modules/useProfile.js'
@@ -91,6 +92,13 @@ const router = createRouter({
       name: 'EncounterPlayer',
       component: EncounterPlayer,
       meta: { requiresAuth: true },
+    },
+    {
+      // Every account and campaign, only for admins
+      path: '/Admin',
+      name: 'Admin',
+      component: AdminView,
+      meta: { requiresAuth: true, roles: ['admin'] },
     },
     {
       path: '/MyAccount',

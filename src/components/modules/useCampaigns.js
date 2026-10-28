@@ -4,16 +4,13 @@ import {
   addDoc,
   getDoc,
   getDocs,
-  deleteDoc,
   query,
   where,
   writeBatch,
   serverTimestamp,
 } from 'firebase/firestore'
 import { db, auth } from '@/firebase'
-import { deleteAllCampaignCharacters } from './useCampaignCharacters.js'
-import { deleteAllEncounters } from './useEncounters.js'
-import { deleteAllMembers } from './useCampaignMembers.js'
+import { deleteCampaignEverywhere } from './useCloudFunctions.js'
 
 // Talking to Firestore about campaigns: making, listing, loading, saving and deleting them.
 //
@@ -91,16 +88,8 @@ export async function saveCampaign(campaignId, { name, shortDescription, longDes
   await batch.commit()
 }
 
-// Firestore doesn't delete what's inside a document along with it, so everything inside goes first.
-// (The rules check the campaign itself to know you're its DM, so the campaign goes last.)
+// Firestore doesn't delete what's inside a document along with it, so a Cloud Function
+// does it: the campaign with its characters, encounters, maps, members and invite code
 export async function deleteCampaign(campaignId) {
-  const campaign = await getDoc(doc(campaignsFolder(), campaignId))
-  const inviteCode = campaign.data()?.inviteCode
-
-  await deleteAllCampaignCharacters(campaignId)
-  await deleteAllEncounters(campaignId)
-  await deleteAllMembers(campaignId)
-  if (inviteCode) await deleteDoc(doc(db, 'inviteCodes', inviteCode))
-  await deleteDoc(notesDoc(campaignId))
-  await deleteDoc(doc(campaignsFolder(), campaignId))
+  await deleteCampaignEverywhere(campaignId)
 }

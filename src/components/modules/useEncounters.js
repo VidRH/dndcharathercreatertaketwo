@@ -181,17 +181,3 @@ export async function deleteEncounter(campaignId, encounterId, mapPath) {
   batch.delete(doc(publicFolder(campaignId), encounterId))
   await batch.commit()
 }
-
-// For deleting a whole campaign: every encounter, public copy and map in it
-export async function deleteAllEncounters(campaignId) {
-  const [encounters, publicCopies] = await Promise.all([
-    getDocs(encountersFolder(campaignId)),
-    getDocs(publicFolder(campaignId)),
-  ])
-  await Promise.all(encounters.docs.map((savedDoc) => deleteMapFile(savedDoc.data().mapPath)))
-
-  const batch = writeBatch(db)
-  encounters.docs.forEach((savedDoc) => batch.delete(savedDoc.ref))
-  publicCopies.docs.forEach((savedDoc) => batch.delete(savedDoc.ref))
-  await batch.commit()
-}

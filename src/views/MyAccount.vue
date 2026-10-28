@@ -7,8 +7,12 @@ import {
   removeProfilePicture,
   pictureProblem,
 } from '@/components/modules/useProfile.js'
-import { changePassword } from '@/components/modules/useAuth.js'
+import { useRouter } from 'vue-router'
+import { changePassword, logOut } from '@/components/modules/useAuth.js'
+import { deleteAccountEverywhere } from '@/components/modules/useCloudFunctions.js'
 import ProfilePicture from '@/components/Account/ProfilePicture.vue'
+
+const router = useRouter()
 
 const roleNames = { player: 'Player', dm: 'Dungeon Master', admin: 'Admin' }
 
@@ -157,6 +161,31 @@ async function onChangePassword() {
     changingPassword.value = false
   }
 }
+
+// ---------- deleting the account ----------
+
+const deletingAccount = ref(false)
+const deleteError = ref('')
+
+async function onDeleteAccount() {
+  const warning =
+    'Delete your account for good?\n\n' +
+    'Your characters, the campaigns you run (for your players too) and your place in other campaigns ' +
+    "will all be gone. This can't be undone."
+  if (!confirm(warning)) return
+
+  deletingAccount.value = true
+  deleteError.value = ''
+  try {
+    await deleteAccountEverywhere(currentProfile.value.uid)
+    // The login is gone on Firebase's side, this also forgets it in the browser
+    await logOut()
+    router.push('/')
+  } catch (e) {
+    deleteError.value = e.message
+    deletingAccount.value = false
+  }
+}
 </script>
 
 <template>
@@ -263,6 +292,18 @@ async function onChangePassword() {
           </button>
         </div>
       </form>
+
+      <!-- kept apart and at the bottom, so nobody presses it by accident -->
+      <section class="border-2 border-red-600 rounded-md p-4 flex flex-col gap-2">
+        <h2 class="text-xl uppercase text-red-600">Delete account</h2>
+        <p class="text-sm">
+          Removes your login, profile, characters and the campaigns you run. Afterwards you can sign up again with the same email.
+        </p>
+        <p v-if="deleteError" class="text-red-600">{{ deleteError }}</p>
+        <button @click="onDeleteAccount" :disabled="deletingAccount" class="self-end border-2 border-red-600 text-red-600 rounded-md px-4 py-1 cursor-pointer disabled:opacity-50">
+          {{ deletingAccount ? 'Deleting...' : 'Delete my account' }}
+        </button>
+      </section>
     </template>
   </main>
 </template>

@@ -26,7 +26,6 @@ import { cleanCode, findInviteCode } from './useInviteCodes.js'
 
 const membersFolder = (campaignId) => collection(db, 'campaigns', campaignId, 'members')
 const memberDoc = (campaignId, uid) => doc(db, 'campaigns', campaignId, 'members', uid)
-const sheetsFolder = (campaignId) => collection(db, 'campaigns', campaignId, 'memberCharacters')
 const sheetDoc = (campaignId, uid) => doc(db, 'campaigns', campaignId, 'memberCharacters', uid)
 const myCharacterDoc = (characterId) => doc(db, 'users', auth.currentUser.uid, 'characters', characterId)
 
@@ -220,14 +219,5 @@ export async function removeMember(campaignId, uid) {
   const batch = writeBatch(db)
   batch.delete(memberDoc(campaignId, uid))
   batch.delete(sheetDoc(campaignId, uid))
-  await batch.commit()
-}
-
-// For deleting a whole campaign: every membership and sheet copy in it
-export async function deleteAllMembers(campaignId) {
-  const [members, sheets] = await Promise.all([getDocs(membersFolder(campaignId)), getDocs(sheetsFolder(campaignId))])
-  const batch = writeBatch(db)
-  members.docs.forEach((savedDoc) => batch.delete(savedDoc.ref))
-  sheets.docs.forEach((savedDoc) => batch.delete(savedDoc.ref))
   await batch.commit()
 }

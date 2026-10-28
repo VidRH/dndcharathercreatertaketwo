@@ -1,0 +1,14 @@
+{
+  "name": "functions",
+  "description": "Cloud Functions: deleting accounts and campaigns with everything in them",
+  "private": true,
+  "type": "module",
+  "main": "index.js",
+  "engines": {
+    "node": "22"
+  },
+  "dependencies": {
+    "firebase-admin": "^14.5.0",
+    "firebase-functions": "^7.4.0"
+  }
+}

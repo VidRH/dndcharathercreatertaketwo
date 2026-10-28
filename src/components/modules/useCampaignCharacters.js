@@ -102,18 +102,6 @@ export async function deleteCampaignCharacter(campaignId, id, allCharacters) {
   return remaining
 }
 
-// For deleting a whole campaign: every character and public copy in it
-export async function deleteAllCampaignCharacters(campaignId) {
-  const [characters, publicCopies] = await Promise.all([
-    getDocs(charactersFolder(campaignId)),
-    getDocs(publicFolder(campaignId)),
-  ])
-  const batch = writeBatch(db)
-  characters.docs.forEach((savedDoc) => batch.delete(savedDoc.ref))
-  publicCopies.docs.forEach((savedDoc) => batch.delete(savedDoc.ref))
-  await batch.commit()
-}
-
 // The alignment names from the API, fetched once and then remembered
 let alignmentNames = null
 export function getAlignmentNames() {

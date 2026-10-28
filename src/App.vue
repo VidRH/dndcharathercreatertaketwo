@@ -1,7 +1,7 @@
 <script setup>
 import { RouterLink, RouterView, useRouter } from 'vue-router'
 import { currentUser, logOut } from '@/components/modules/useAuth.js'
-import { currentProfile, isDM } from '@/components/modules/useProfile.js'
+import { currentProfile, isDM, isAdmin } from '@/components/modules/useProfile.js'
 import ProfilePicture from '@/components/Account/ProfilePicture.vue'
 
 const router = useRouter()
@@ -16,11 +16,12 @@ async function handleLogOut() {
   <header>
     <div>
       <!-- flex-wrap: the links go onto a second line on small screens instead of off the edge -->
-      <nav class="bg-dark text-white gap-x-5 gap-y-1 flex flex-wrap min-h-12.5 items-center px-5 py-2 uppercase weight-bold text-xl">
+      <nav class="bg-paperdarkest text-white gap-x-5 gap-y-1 flex flex-wrap min-h-12.5 items-center px-5 py-2 uppercase weight-bold text-xl">
         <RouterLink to="/" class="hover:text-blue ">Home</RouterLink>
         <RouterLink v-if="currentUser" to="/MyCharacters" class="hover:text-blue ">My Characters</RouterLink>
         <RouterLink v-if="currentUser" to="/Campaigns" class="hover:text-blue ">Campaigns</RouterLink>
         <router-link v-if="currentUser && isDM" to="/DungeonMaster" class="hover:text-blue ">Dungeon Master</router-link>
+        <RouterLink v-if="currentUser && isAdmin" to="/Admin" class="hover:text-blue ">Admin</RouterLink>
         <div v-if="!currentUser" class="ml-auto flex items-center gap-5">
           <RouterLink to="/LogIn" class="hover:text-blue ">Log In</RouterLink>
           <RouterLink to="/SignUp" class="hover:text-blue ">Sign Up</RouterLink>
