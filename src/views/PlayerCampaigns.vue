@@ -144,7 +144,7 @@ async function onLeave(campaign) {
 
       <div v-else class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div v-for="campaign in campaigns" :key="campaign.id" class="border-2 border-black rounded-md p-3 flex flex-col gap-2">
-          <p class="text-xl font-bold break-words">{{ campaign.name }}</p>
+          <RouterLink :to="`/Campaigns/${campaign.id}`" class="text-xl font-bold break-words hover:text-blue underline">{{ campaign.name }}</RouterLink>
           <p v-if="campaign.shortDescription" class="break-words">{{ campaign.shortDescription }}</p>
           <p class="text-sm">Playing as <span class="font-bold">{{ characterLabel(campaign.character) }}</span></p>
 

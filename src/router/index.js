@@ -9,6 +9,8 @@ import CampaignDM from '../views/CampaignDM.vue'
 import EncounterDM from '../views/EncounterDM.vue'
 import PlayerDM from '../views/PlayerDM.vue'
 import PlayerCampaigns from '../views/PlayerCampaigns.vue'
+import CampaignPlayer from '../views/CampaignPlayer.vue'
+import EncounterPlayer from '../views/EncounterPlayer.vue'
 import MyAccount from '../views/MyAccount.vue'
 import { authReady } from '../components/modules/useAuth.js'
 import { loadProfile, hasRole } from '../components/modules/useProfile.js'
@@ -73,6 +75,21 @@ const router = createRouter({
       path: '/Campaigns',
       name: 'Campaigns',
       component: PlayerCampaigns,
+      meta: { requiresAuth: true },
+    },
+    {
+      // A campaign you joined, as a player sees it, e.g. /Campaigns/abc123
+      // (No role needed: the Firestore rules decide whether you may see it)
+      path: '/Campaigns/:campaignId',
+      name: 'CampaignPlayer',
+      component: CampaignPlayer,
+      meta: { requiresAuth: true },
+    },
+    {
+      // One encounter of it, e.g. /Campaigns/abc123/encounter/xyz789
+      path: '/Campaigns/:campaignId/encounter/:encounterId',
+      name: 'EncounterPlayer',
+      component: EncounterPlayer,
       meta: { requiresAuth: true },
     },
     {

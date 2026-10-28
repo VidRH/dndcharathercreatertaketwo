@@ -15,6 +15,7 @@ import VisibilityToggle from '@/components/DungeonMaster/VisibilityToggle.vue'
 import MonsterSearch from '@/components/DungeonMaster/MonsterSearch.vue'
 import MonsterStatBlock from '@/components/DungeonMaster/MonsterStatBlock.vue'
 import EncounterCalculator from '@/components/DungeonMaster/EncounterCalculator.vue'
+import MapViewer from '@/components/DungeonMaster/MapViewer.vue'
 
 // The DM's page for one encounter: /DungeonMaster/:campaignId/encounter/:encounterId
 const route = useRoute()
@@ -45,7 +46,6 @@ const newMap = ref(null) // picked, not uploaded until Save
 const newMapPreview = ref('')
 const removeMap = ref(false)
 const mapError = ref('')
-const mapOpen = ref(false) // the big full-screen view
 
 const mapToShow = computed(() => {
   if (newMapPreview.value) return newMapPreview.value
@@ -81,15 +81,7 @@ function clearNewMap() {
   newMap.value = null
 }
 
-// Escape closes the full-screen map
-function onKeydown(event) {
-  if (event.key === 'Escape') mapOpen.value = false
-}
-onMounted(() => window.addEventListener('keydown', onKeydown))
-onUnmounted(() => {
-  window.removeEventListener('keydown', onKeydown)
-  clearNewMap()
-})
+onUnmounted(clearNewMap)
 
 // ---------- monsters ----------
 
@@ -247,9 +239,7 @@ async function onDelete() {
             <VisibilityToggle v-model="form.visible.map" />
           </div>
 
-          <button v-if="mapToShow" type="button" @click="mapOpen = true" class="cursor-zoom-in" title="Click to see it big">
-            <img :src="mapToShow" alt="Encounter map" class="w-full max-h-96 object-contain border bg-paperdarker" />
-          </button>
+          <MapViewer v-if="mapToShow" :url="mapToShow" />
           <p v-else class="text-sm text-gray-500">No map yet.</p>
 
           <div class="flex flex-wrap items-center gap-3">
@@ -333,11 +323,6 @@ async function onDelete() {
           Delete encounter
         </button>
       </section>
-
-      <!-- the map, full screen. Click anywhere or press Escape to close. -->
-      <div v-if="mapOpen && mapToShow" @click="mapOpen = false" class="fixed inset-0 z-50 bg-black/85 flex items-center justify-center p-4 cursor-zoom-out">
-        <img :src="mapToShow" alt="Encounter map" class="max-w-full max-h-full object-contain" />
-      </div>
     </template>
   </main>
 </template>

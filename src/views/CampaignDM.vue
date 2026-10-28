@@ -66,7 +66,10 @@ function onSaved(fields) {
     <p v-else-if="error" class="text-red-600">{{ error }}</p>
 
     <template v-else>
-      <h1 class="text-2xl uppercase break-words">{{ campaign.name }}</h1>
+      <div class="flex flex-wrap justify-between items-center gap-2">
+        <h1 class="text-2xl uppercase break-words">{{ campaign.name }}</h1>
+        <RouterLink :to="`/Campaigns/${campaign.id}`" class="text-sm underline hover:text-blue">See what players see</RouterLink>
+      </div>
 
       <!-- tab buttons, they scroll sideways on a phone when there are many -->
       <nav class="flex gap-2 overflow-x-auto border-b-2 border-black">
