@@ -12,6 +12,8 @@ import { changePassword, logOut } from '@/components/modules/useAuth.js'
 import { deleteAccountEverywhere } from '@/components/modules/useCloudFunctions.js'
 import ProfilePicture from '@/components/Account/ProfilePicture.vue'
 
+
+
 const router = useRouter()
 
 const roleNames = { player: 'Player', dm: 'Dungeon Master', admin: 'Admin' }
@@ -186,6 +188,11 @@ async function onDeleteAccount() {
     deletingAccount.value = false
   }
 }
+
+async function handleLogOut() {
+  await logOut()
+  router.push('/LogIn')
+}
 </script>
 
 <template>
@@ -212,11 +219,14 @@ async function onDeleteAccount() {
 
           <p v-if="passwordDone" class="self-end mt-2 text-green-700">Your password has been changed.</p>
           <div class="self-end mt-2 flex flex-wrap justify-end gap-2">
-            <button v-if="!showPasswordForm" @click="openPasswordForm" class="border-2 border-black rounded-md px-4 py-1 cursor-pointer">
+            <button v-if="!showPasswordForm" @click="openPasswordForm" class="border-2 hover:text-blue border-black rounded-md px-4 py-1 cursor-pointer">
               Change password
             </button>
-            <button @click="startEditing" class="border-2 border-black rounded-md px-4 py-1 cursor-pointer bg-black text-white">
+            <button @click="startEditing" class="border-2 border-black hover:text-blue rounded-md px-4 py-1 cursor-pointer ">
               Edit profile
+            </button>
+            <button @click="handleLogOut" class="uppercase hover:text-blue cursor-pointer  text-white bg-black border-black border-2 rounded-md px-4 py-1">
+              Log Out
             </button>
           </div>
         </div>
